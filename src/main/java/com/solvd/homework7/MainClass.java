@@ -449,6 +449,7 @@ public class MainClass {
         searched2.print();
 
         System.out.println("Testing PR in master.");
+        System.out.println("Test PR second-branch.");
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
