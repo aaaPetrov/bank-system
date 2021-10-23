@@ -450,6 +450,7 @@ public class MainClass {
 
         System.out.println("Testing PR in master.");
         System.out.println("Test PR second-branch.");
+        System.out.println("Testing PR in first-branch.");
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
