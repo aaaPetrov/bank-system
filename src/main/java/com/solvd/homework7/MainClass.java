@@ -447,10 +447,6 @@ public class MainClass {
         jeweleryBank2.addContribution(client2, goldContribution1);
         Contribution<? extends Value> searched2 = jeweleryBank2.findContribution(client2);
         searched2.print();
-
-        System.out.println("Master.");
-        System.out.println("Testing .git branches.");
-        System.out.println("This is a first one.");
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
