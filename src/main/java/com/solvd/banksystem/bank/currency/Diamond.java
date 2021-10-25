@@ -104,7 +104,7 @@ public class Diamond extends Value {
     @Override
     public String toString() {
         return "Class Diamond [carats = " + carats + ", pricePerCarat = " +
-                pricePerCarat + ", color = " + color + ", clarity = " + clarity + "]";
+                pricePerCarat + ", color = " + color + ", clarity = " + clarity.name() + "]";
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Diamond extends Value {
         }
         Diamond diamond = (Diamond) object;
         return carats == diamond.getCarats() && pricePerCarat.equals(diamond.getPricePerCarat())
-                && (color != null && color.equals(diamond.getColor())) && clarity.name() == diamond.getClarity().name();
+                && (color != null && color.equals(diamond.getColor())) && clarity.name().equals(diamond.getClarity().name());
     }
 
     @Override

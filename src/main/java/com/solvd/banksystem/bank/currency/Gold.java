@@ -5,13 +5,32 @@ import java.util.Objects;
 
 public class Gold extends Value {
 
-    private double weight;
-    private Currency pricePerGram;
-    private int content;
+    public enum Content {
+        С999(127.51),
+        C958(122.15),
+        C950(121.13),
+        C916(116.80),
+        C875(114.76),
+        C750(95.63),
+        C585(74.59);
 
-    public Gold(double weight, Currency pricePerGram, int content) {
+        private final Currency pricePerGram;
+
+        Content(double moneyAmount) {
+            pricePerGram = new Currency(moneyAmount, Currency.CurrencyType.BYN);
+        }
+
+        public Currency getPricePerGram() {
+            return pricePerGram;
+        }
+
+    }
+
+    private double weight;
+    private Content content;
+
+    public Gold(double weight, Content content) {
             this.weight = weight;
-            this.pricePerGram = pricePerGram;
             this.content = content;
     }
 
@@ -27,30 +46,27 @@ public class Gold extends Value {
     }
 
     public Currency getPricePerGram() {
-        return pricePerGram;
+        return this.content.getPricePerGram();
     }
 
-    public void setPricePerGram(Currency pricePerGram) {
-            this.pricePerGram = pricePerGram;
-    }
-
-    public int getContent() {
+    public Content getContent() {
         return content;
     }
 
-    public void setContent(int content) {
+    public void setContent(Content content) {
         this.content = content;
     }
 
     @Override
     public Currency getValue() {
-        return new Currency(weight * pricePerGram.getAmount(), pricePerGram.getCurrencyType());
+        return new Currency(weight * this.content.getPricePerGram().getAmount(),
+                this.content.getPricePerGram().getCurrencyType());
     }
 
     @Override
     public void setValue(Currency currency) {
-        if (currency.getCurrencyType().equals(this.pricePerGram.getCurrencyType())) {
-            this.weight = currency.getAmount() / this.pricePerGram.getAmount();
+        if (currency.getCurrencyType().equals( this.content.getPricePerGram().getCurrencyType())) {
+            this.weight = currency.getAmount() / this.content.getPricePerGram().getAmount();
         } else {
             throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
         }
@@ -61,23 +77,22 @@ public class Gold extends Value {
         if(value instanceof Gold) {
             Gold gold = (Gold) value;
             this.weight = gold.getWeight();
-            this.pricePerGram = gold.getPricePerGram();
             this.content = gold.getContent();
         }
     }
 
     @Override
     public void print() {
-        System.out.println("Gold " + content + " content.");
-        System.out.println("Weight " + weight + " gram, " + pricePerGram.getAmount()
-                + " " + pricePerGram.getCurrencyType() + " per gram.");
+        System.out.println("Gold " + content.name() + " content.");
+        System.out.println("Weight " + weight + " gram, " + this.content.getPricePerGram().getAmount()
+                + " " + this.content.getPricePerGram().getCurrencyType() + " per gram.");
         System.out.println("Total cost: " + getValue().getAmount() + " " + getValue().getCurrencyType());
     }
 
     @Override
     public String toString() {
         return "Class Gold [weight = " + weight + ", pricePerGram = " +
-                pricePerGram + ", content = " + content + "]";
+                this.content.getPricePerGram() + " " + this.content.getPricePerGram().getCurrencyType() + ", content = " + content.name() + "]";
     }
 
     @Override
@@ -89,12 +104,12 @@ public class Gold extends Value {
             return false;
         }
         Gold gold = (Gold) object;
-        return weight == gold.getWeight() && pricePerGram.equals(gold.getPricePerGram()) && content == gold.getContent();
+        return weight == gold.getWeight() && content.name().equals(gold.getContent().name());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(weight, pricePerGram, content);
+        return Objects.hash(weight, content);
     }
 
 }
