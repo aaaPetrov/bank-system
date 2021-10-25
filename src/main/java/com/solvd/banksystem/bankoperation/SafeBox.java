@@ -50,7 +50,7 @@ public class SafeBox<T extends Value> implements Printable {
     public void print() {
         System.out.println("Deposit:");
         deposit.print();
-        System.out.println("\nStorage period: " + opened.getDayOfMonth() + "." + opened.getMonth() + "." + opened.getYear()
+        System.out.println("Storage period: " + opened.getDayOfMonth() + "." + opened.getMonth() + "." + opened.getYear()
                             + " - " + closed.getDayOfMonth() + "." + closed.getMonth() + "." + closed.getYear() + ".");
         System.out.println("Storage cost: " + pricePerMonth.getAmount() * storageTimeInMonth + " " + pricePerMonth.getCurrencyType());
     }

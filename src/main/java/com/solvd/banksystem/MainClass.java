@@ -415,7 +415,7 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////SEVENTEENTH////////////////////////////\n\n");
         Gold gold = new Gold(500, new Currency(127.51, CurrencyType.BYN), 999);
         SafeBox<? extends Value> goldSafeBox = new SafeBox<>(gold, 3);
-        Diamond diamond = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", 'A');
+        Diamond diamond = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
         SafeBox<? extends Value> diamondSafeBox = new SafeBox<>(diamond, 12);
         Currency currency = new Currency(120000, CurrencyType.EURO);
         SafeBox<? extends Value> currencySafeBox = new SafeBox<>(currency, 7);
@@ -424,6 +424,7 @@ public class MainClass {
         diamondSafeBox.print();
         System.out.println("\n");
         currencySafeBox.print();
+        System.out.println("\n");
 
         JeweleryBank<? extends Value> jeweleryBank2 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
         Contribution<? extends Value> diamondContribution1 = new Contribution<>(diamond);
