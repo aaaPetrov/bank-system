@@ -5,7 +5,7 @@ import com.solvd.banksystem.bank.currency.Currency;
 import com.solvd.banksystem.bankoperation.BankOperation;
 import com.solvd.banksystem.bankoperation.Mortgage;
 import com.solvd.banksystem.human.Human;
-
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class MortgageBank extends Bank {
             return;
         }
         if (this.mortgages != null) {
-            if (!this.mortgages.contains(operation)) {
+            if (!this.mortgages.contains((Mortgage) operation)) {
                 this.mortgages.add((Mortgage) operation);
             } else {
                 System.out.println("Credit already exist.");
@@ -108,10 +108,10 @@ public class MortgageBank extends Bank {
                 super.getFoundedAt().getDayOfMonth() + "." + super.getFoundedAt().getMonth() + "." + super.getFoundedAt().getYear());
         System.out.println("Number of mortgage in bank: " + mortgages.size());
         System.out.println("Bank capital:");
-        System.out.println(super.getUsd().getAmount() + " " + Currency.USD);
-        System.out.println(super.getEur().getAmount() + " " + Currency.EURO);
-        System.out.println(super.getRub().getAmount() + " " + Currency.RUB);
-        System.out.println(super.getByn().getAmount() + " " + Currency.BYN);
+        System.out.println(super.getUsd().getAmount() + " " + CurrencyType.USD.getType());
+        System.out.println(super.getEur().getAmount() + " " + CurrencyType.EURO.getType());
+        System.out.println(super.getRub().getAmount() + " " + CurrencyType.RUB.getType());
+        System.out.println(super.getByn().getAmount() + " " + CurrencyType.BYN.getType());
     }
 
     @Override

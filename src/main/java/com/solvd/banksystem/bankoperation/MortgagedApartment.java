@@ -36,7 +36,7 @@ public class MortgagedApartment extends Address {
         System.out.println("Apartment address: " + super.getCity() + ", " + super.getStreet()
                 + " " + super.getHouseNumber() + ", ap." + roomNumber);
         System.out.println("Collateral value of an apartment: "
-                + (price.getAmount() * 30 / 100) + " " + price.getType() + ".");
+                + (price.getAmount() * 30 / 100) + " " + price.getCurrencyType() + ".");
     }
 
     @Override

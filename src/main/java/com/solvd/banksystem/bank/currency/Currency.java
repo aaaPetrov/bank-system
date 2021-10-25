@@ -1,28 +1,34 @@
 package com.solvd.banksystem.bank.currency;
 
-import com.solvd.banksystem.exception.InvalidCurrencyTypeException;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.util.Objects;
 
 public class Currency extends Value implements Printable {
 
-    public static final String USD = "USD";
-    public static final String EURO = "EUR";
-    public static final String BYN = "BYN";
-    public static final String RUB = "RUB";
+    public enum  CurrencyType {
 
-    private String type;
+        USD("USD"), EURO("EUR"), RUB("RUB"), BYN("BYN");
+
+        private final String type;
+
+        CurrencyType(String type) {
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+    }
+
+    private CurrencyType currencyType;
     private double amount;
 
     public Currency() {}
 
-    public Currency(double moneyAmount, String moneyType) {
-        if (moneyType.equals("USD") || moneyType.equals("EUR") || moneyType.equals("RUB") || moneyType.equals("BYN")) {
+    public Currency(double moneyAmount, CurrencyType currencyType) {
             this.amount = moneyAmount;
-            this.type = moneyType;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
+            this.currencyType = currencyType;
     }
 
     public void setAmount(double moneyAmount) {
@@ -33,27 +39,23 @@ public class Currency extends Value implements Printable {
         return amount;
     }
 
-    public void setType(String moneyType) {
-        if (moneyType.equals("USD") || moneyType.equals("EUR") || moneyType.equals("RUB") || moneyType.equals("BYN")) {
-            this.type = moneyType;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
+    public void setCurrencyType(CurrencyType currencyType) {
+            this.currencyType = currencyType;
     }
 
-    public String getType() {
-        return type;
+    public CurrencyType getCurrencyType() {
+        return currencyType;
     }
 
     @Override
     public Currency getValue() {
-        return new Currency(amount, type);
+        return new Currency(amount, currencyType);
     }
 
     @Override
     public void setValue(Currency currency) {
         this.amount = currency.getAmount();
-        this.type = currency.getType();
+        this.currencyType = currency.getCurrencyType();
     }
 
     @Override
@@ -61,20 +63,18 @@ public class Currency extends Value implements Printable {
         if(value instanceof Currency) {
             Currency currency = (Currency) value;
             amount = currency.getAmount();
-            type = currency.getType();
+            currencyType = currency.getCurrencyType();
         }
     }
 
     @Override
     public void print() {
-        System.out.println("Money amount: " + amount + " " + type);
+        System.out.println("Money amount: " + amount + " " + currencyType);
     }
 
     @Override
     public String toString() {
-        return "Class Currency [USD = " + USD + ", EURO = " +
-                EURO + ", BYN = " + BYN + ", RUB = " +
-                RUB + ", type = " + type + ", amount = " + amount + "]";
+        return "Class Currency [type = " + currencyType + ", amount = " + amount + "]";
     }
 
     @Override
@@ -86,11 +86,11 @@ public class Currency extends Value implements Printable {
             return false;
         }
         Currency currency = (Currency) object;
-        return amount == currency.getAmount() && (type != null && type.equals(currency.getType()));
+        return amount == currency.getAmount() && (currencyType != null && currencyType.equals(currency.getCurrencyType()));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(USD, EURO, BYN, RUB, amount, type);
+        return Objects.hash(amount, currencyType);
     }
 }

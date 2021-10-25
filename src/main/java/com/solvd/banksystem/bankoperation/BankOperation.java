@@ -1,7 +1,7 @@
 package com.solvd.banksystem.bankoperation;
 
 import com.solvd.banksystem.bankoperation.client.Client;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -47,15 +47,15 @@ public class JeweleryBank<T extends Value> extends Organization {
     public double amountOfDeposits() {
         double resultAmount = 0;
         for (Map.Entry<Client,Contribution<? extends Value>> entry : this.contributions.entrySet()) {
-            if(entry.getValue().getInvested().getValue().getType().equals(Currency.USD)) {
+            if(entry.getValue().getInvested().getValue().getCurrencyType().getType().equals(Currency.CurrencyType.USD.getType())) {
                 resultAmount += entry.getValue().getInvested().getValue().getAmount();
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.EURO)) {
+            } else if(entry.getValue().getInvested().getValue().getCurrencyType().getType().equals(Currency.CurrencyType.EURO.getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() * Exchangable.EURO_TO_USD;
                 resultAmount += converted;
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.RUB)) {
+            } else if(entry.getValue().getInvested().getValue().getCurrencyType().getType().equals(Currency.CurrencyType.RUB.getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() * Exchangable.RUB_TO_USD;
                 resultAmount += converted;
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.BYN)) {
+            } else if(entry.getValue().getInvested().getValue().getCurrencyType().getType().equals(Currency.CurrencyType.BYN.getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() / Exchangable.USD_BUY;
                 resultAmount += converted;
             }

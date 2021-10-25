@@ -10,14 +10,9 @@ public class Gold extends Value {
     private int content;
 
     public Gold(double weight, Currency pricePerGram, int content) {
-        if (pricePerGram.getType().equals("USD") || pricePerGram.getType().equals("EUR")
-                || pricePerGram.getType().equals("RUB") || pricePerGram.getType().equals("BYN")) {
             this.weight = weight;
             this.pricePerGram = pricePerGram;
             this.content = content;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
     }
 
     public Gold() {
@@ -36,12 +31,7 @@ public class Gold extends Value {
     }
 
     public void setPricePerGram(Currency pricePerGram) {
-        if (pricePerGram.getType().equals("USD") || pricePerGram.getType().equals("EUR")
-                || pricePerGram.getType().equals("RUB") || pricePerGram.getType().equals("BYN")) {
             this.pricePerGram = pricePerGram;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
     }
 
     public int getContent() {
@@ -54,12 +44,12 @@ public class Gold extends Value {
 
     @Override
     public Currency getValue() {
-        return new Currency(weight * pricePerGram.getAmount(), pricePerGram.getType());
+        return new Currency(weight * pricePerGram.getAmount(), pricePerGram.getCurrencyType());
     }
 
     @Override
     public void setValue(Currency currency) {
-        if (currency.getType().equals(this.pricePerGram.getType())) {
+        if (currency.getCurrencyType().equals(this.pricePerGram.getCurrencyType())) {
             this.weight = currency.getAmount() / this.pricePerGram.getAmount();
         } else {
             throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
@@ -80,8 +70,8 @@ public class Gold extends Value {
     public void print() {
         System.out.println("Gold " + content + " content.");
         System.out.println("Weight " + weight + " gram, " + pricePerGram.getAmount()
-                + " " + pricePerGram.getType() + " per gram.");
-        System.out.println("Total cost: " + getValue().getAmount() + " " + getValue().getType());
+                + " " + pricePerGram.getCurrencyType() + " per gram.");
+        System.out.println("Total cost: " + getValue().getAmount() + " " + getValue().getCurrencyType());
     }
 
     @Override

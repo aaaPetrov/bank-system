@@ -1,6 +1,7 @@
 package com.solvd.banksystem.bank;
 
 import com.solvd.banksystem.address.Address;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 import com.solvd.banksystem.bank.employee.Employee;
 import com.solvd.banksystem.bank.organization.Organization;
 import com.solvd.banksystem.bank.organization.TaxPayable;
@@ -67,14 +68,14 @@ public class BankSystem extends Organization implements Findable {
         return result;
     }
 
-    public void searchForCreditType(String moneyType) {
+    public void searchForCreditType(CurrencyType currencyType) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
         int flag = 0;
         int otherBanks = 0;
         for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
-                List<CreditType> creditTypes = creditBank.findCreditType(moneyType);
+                List<CreditType> creditTypes = creditBank.findCreditType(currencyType);
                 if (creditTypes != null && !creditTypes.isEmpty()) {
                     for (CreditType creditTypeElement : creditTypes) {
                         System.out.print("Bank \"" + element.getName() + "\" : ");
@@ -92,14 +93,14 @@ public class BankSystem extends Organization implements Findable {
         }
     }
 
-    public void searchForCreditType(String moneyType, double moneyAmount) {
+    public void searchForCreditType(CurrencyType currencyType, double moneyAmount) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
         int flag = 0;
         int otherBanks = 0;
         for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
-                List<CreditType> creditTypes = creditBank.findCreditType(moneyType, moneyAmount);
+                List<CreditType> creditTypes = creditBank.findCreditType(currencyType, moneyAmount);
                 if (creditTypes != null && !creditTypes.isEmpty()) {
                     for (CreditType creditTypeElement : creditTypes) {
                         System.out.print("Bank \"" + element.getName() + "\" : ");

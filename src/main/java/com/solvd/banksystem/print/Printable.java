@@ -1,4 +1,4 @@
-package print;
+package com.solvd.banksystem.print;
 
 public interface Printable {
 

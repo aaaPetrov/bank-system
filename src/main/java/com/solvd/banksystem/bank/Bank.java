@@ -7,6 +7,7 @@ import com.solvd.banksystem.bank.organization.Organization;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public abstract class Bank extends Organization implements Exchangable, Findable, Operationable {
 
@@ -20,7 +21,7 @@ public abstract class Bank extends Organization implements Exchangable, Findable
 
     public Bank(String name, Address address, LocalDateTime foundedAt) {
         super(name, address, foundedAt);
-        this.count++;
+        count++;
     }
 
     public Bank(String nameOfBank, Address address, LocalDateTime foundedAt, Currency usd, Currency eur, Currency rub, Currency byn) {
@@ -98,29 +99,29 @@ public abstract class Bank extends Organization implements Exchangable, Findable
 
     @Override
     public Currency exchangeToUsd(Currency currency) {
-        switch (currency.getType()) {
-            case Currency.USD:
+        switch (currency.getCurrencyType()) {
+            case USD:
                 return currency;
-            case Currency.EURO: {
+            case EURO: {
                 double amountOfEuro = currency.getAmount();
                 double resultUSD = amountOfEuro * Exchangable.EURO_TO_USD;
-                setEur(new Currency((getEur().getAmount() + amountOfEuro), Currency.EURO));
-                setUsd(new Currency((getUsd().getAmount() - resultUSD), Currency.USD));
-                return new Currency(resultUSD, Currency.USD);
+                setEur(new Currency((getEur().getAmount() + amountOfEuro), CurrencyType.EURO));
+                setUsd(new Currency((getUsd().getAmount() - resultUSD), CurrencyType.USD));
+                return new Currency(resultUSD, CurrencyType.USD);
             }
-            case Currency.RUB: {
+            case RUB: {
                 double amountOfRub = currency.getAmount();
                 double resultUSD = amountOfRub * Exchangable.RUB_TO_USD;
-                setRub(new Currency((getRub().getAmount() + amountOfRub), Currency.RUB));
-                setUsd(new Currency((getUsd().getAmount() - resultUSD), Currency.USD));
-                return new Currency(resultUSD, Currency.USD);
+                setRub(new Currency((getRub().getAmount() + amountOfRub), CurrencyType.RUB));
+                setUsd(new Currency((getUsd().getAmount() - resultUSD), CurrencyType.USD));
+                return new Currency(resultUSD, CurrencyType.USD);
             }
-            case Currency.BYN: {
+            case BYN: {
                 double amountOfByn = currency.getAmount();
                 double resultUSD = amountOfByn * Exchangable.USD_SELL;
-                setByn(new Currency((getByn().getAmount() + amountOfByn), Currency.BYN));
-                setUsd(new Currency((getUsd().getAmount() - resultUSD), Currency.USD));
-                return new Currency(resultUSD, Currency.USD);
+                setByn(new Currency((getByn().getAmount() + amountOfByn), CurrencyType.BYN));
+                setUsd(new Currency((getUsd().getAmount() - resultUSD), CurrencyType.USD));
+                return new Currency(resultUSD, CurrencyType.USD);
             }
         }
         return null;
@@ -128,29 +129,29 @@ public abstract class Bank extends Organization implements Exchangable, Findable
 
     @Override
     public Currency exchangeToEuro(Currency currency) {
-        switch (currency.getType()) {
-            case Currency.USD: {
+        switch (currency.getCurrencyType()) {
+            case USD: {
                 double amountOfUsd = currency.getAmount();
                 double resultEuro = amountOfUsd * Exchangable.USD_TO_EURO;
-                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), Currency.USD));
-                setEur(new Currency((getEur().getAmount() - resultEuro), Currency.EURO));
-                return new Currency(resultEuro, Currency.EURO);
+                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), CurrencyType.USD));
+                setEur(new Currency((getEur().getAmount() - resultEuro), CurrencyType.EURO));
+                return new Currency(resultEuro, CurrencyType.EURO);
             }
-            case Currency.EURO:
+            case EURO:
                 return currency;
-            case Currency.RUB: {
+            case RUB: {
                 double amountOfRub = currency.getAmount();
                 double resultEuro = amountOfRub * Exchangable.RUB_TO_EURO;
-                setRub(new Currency((getRub().getAmount() + amountOfRub), Currency.RUB));
-                setEur(new Currency((getEur().getAmount() - resultEuro), Currency.EURO));
-                return new Currency(resultEuro, Currency.EURO);
+                setRub(new Currency((getRub().getAmount() + amountOfRub), CurrencyType.RUB));
+                setEur(new Currency((getEur().getAmount() - resultEuro), CurrencyType.EURO));
+                return new Currency(resultEuro, CurrencyType.EURO);
             }
-            case Currency.BYN: {
+            case BYN: {
                 double amountOfByn = currency.getAmount();
                 double resultEuro = amountOfByn * Exchangable.EURO_SELL;
-                setByn(new Currency((getByn().getAmount() + amountOfByn), Currency.BYN));
-                setEur(new Currency((getEur().getAmount() - resultEuro), Currency.EURO));
-                return new Currency(resultEuro, Currency.EURO);
+                setByn(new Currency((getByn().getAmount() + amountOfByn), CurrencyType.BYN));
+                setEur(new Currency((getEur().getAmount() - resultEuro), CurrencyType.EURO));
+                return new Currency(resultEuro, CurrencyType.EURO);
             }
         }
         return null;
@@ -158,29 +159,29 @@ public abstract class Bank extends Organization implements Exchangable, Findable
 
     @Override
     public Currency exchangeToRub(Currency currency) {
-        switch (currency.getType()) {
-            case Currency.USD: {
+        switch (currency.getCurrencyType()) {
+            case USD: {
                 double amountOfUsd = currency.getAmount();
                 double resultRub = amountOfUsd * Exchangable.USD_TO_RUB;
-                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), Currency.USD));
-                setRub(new Currency((getRub().getAmount() - resultRub), Currency.RUB));
-                return new Currency(resultRub, Currency.RUB);
+                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), CurrencyType.USD));
+                setRub(new Currency((getRub().getAmount() - resultRub), CurrencyType.RUB));
+                return new Currency(resultRub, CurrencyType.RUB);
             }
-            case Currency.EURO: {
+            case EURO: {
                 double amountOfEuro = currency.getAmount();
                 double resultRub = amountOfEuro * Exchangable.EURO_TO_RUB;
-                setEur(new Currency((getEur().getAmount() + amountOfEuro), Currency.EURO));
-                setRub(new Currency((getRub().getAmount() - resultRub), Currency.RUB));
-                return new Currency(resultRub, Currency.RUB);
+                setEur(new Currency((getEur().getAmount() + amountOfEuro), CurrencyType.EURO));
+                setRub(new Currency((getRub().getAmount() - resultRub), CurrencyType.RUB));
+                return new Currency(resultRub, CurrencyType.RUB);
             }
-            case Currency.RUB:
+            case RUB:
                 return currency;
-            case Currency.BYN: {
+            case BYN: {
                 double amountOfByn = currency.getAmount();
                 double resultRub = amountOfByn * Exchangable.RUB_SELL;
-                setByn(new Currency((getByn().getAmount() + amountOfByn), Currency.BYN));
-                setRub(new Currency((getRub().getAmount() - resultRub), Currency.RUB));
-                return new Currency(resultRub, Currency.RUB);
+                setByn(new Currency((getByn().getAmount() + amountOfByn), CurrencyType.BYN));
+                setRub(new Currency((getRub().getAmount() - resultRub), CurrencyType.RUB));
+                return new Currency(resultRub, CurrencyType.RUB);
             }
         }
         return null;
@@ -188,29 +189,29 @@ public abstract class Bank extends Organization implements Exchangable, Findable
 
     @Override
     public Currency exchangeToByn(Currency currency) {
-        switch (currency.getType()) {
-            case Currency.USD: {
+        switch (currency.getCurrencyType()) {
+            case USD: {
                 double amountOfUsd = currency.getAmount();
                 double resultByn = amountOfUsd * Exchangable.USD_SELL;
-                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), Currency.USD));
-                setByn(new Currency((getByn().getAmount() - resultByn), Currency.BYN));
-                return new Currency(resultByn, Currency.BYN);
+                setUsd(new Currency((getUsd().getAmount() + amountOfUsd), CurrencyType.USD));
+                setByn(new Currency((getByn().getAmount() - resultByn), CurrencyType.BYN));
+                return new Currency(resultByn, CurrencyType.BYN);
             }
-            case Currency.EURO: {
+            case EURO: {
                 double amountOfEuro = currency.getAmount();
                 double resultByn = amountOfEuro * Exchangable.EURO_SELL;
-                setEur(new Currency((getEur().getAmount() + amountOfEuro), Currency.EURO));
-                setByn(new Currency((getByn().getAmount() - resultByn), Currency.BYN));
-                return new Currency(resultByn, Currency.BYN);
+                setEur(new Currency((getEur().getAmount() + amountOfEuro), CurrencyType.EURO));
+                setByn(new Currency((getByn().getAmount() - resultByn), CurrencyType.BYN));
+                return new Currency(resultByn, CurrencyType.BYN);
             }
-            case Currency.RUB: {
+            case RUB: {
                 double amountOfRub = currency.getAmount();
                 double resultByn = amountOfRub * Exchangable.RUB_SELL;
-                setRub(new Currency((getRub().getAmount() + amountOfRub), Currency.RUB));
-                setByn(new Currency((getByn().getAmount() - resultByn), Currency.BYN));
-                return new Currency(resultByn, Currency.BYN);
+                setRub(new Currency((getRub().getAmount() + amountOfRub), CurrencyType.RUB));
+                setByn(new Currency((getByn().getAmount() - resultByn), CurrencyType.BYN));
+                return new Currency(resultByn, CurrencyType.BYN);
             }
-            case Currency.BYN:
+            case BYN:
                 return currency;
         }
         return null;

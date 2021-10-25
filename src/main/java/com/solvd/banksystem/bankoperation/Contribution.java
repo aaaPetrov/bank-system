@@ -4,7 +4,7 @@ import com.solvd.banksystem.bank.currency.Currency;
 import com.solvd.banksystem.bank.currency.Diamond;
 import com.solvd.banksystem.bank.currency.Gold;
 import com.solvd.banksystem.bank.currency.Value;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.util.Objects;
 
 public class Contribution<T extends Value> implements Printable {
@@ -27,7 +27,7 @@ public class Contribution<T extends Value> implements Printable {
             this.returned.copy(invested);
         }
         double returnedAmount = invested.getValue().getAmount() + (invested.getValue().getAmount() * yearPercent * termInYears);
-        this.returned.setValue(new Currency(returnedAmount, invested.getValue().getType()));
+        this.returned.setValue(new Currency(returnedAmount, invested.getValue().getCurrencyType()));
     }
 
     public T getInvested() {

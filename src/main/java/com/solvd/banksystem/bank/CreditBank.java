@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class CreditBank extends Bank {
 
@@ -62,12 +63,12 @@ public class CreditBank extends Bank {
         return this.creditTypes.remove(creditType);
     }
 
-    public List<CreditType> findCreditType(String moneyType) {
+    public List<CreditType> findCreditType(CurrencyType currencyType) {
         List<CreditType> result = null;
         if (this.creditTypes != null && this.creditTypes.size() > 0) {
             result = new ArrayList<>();
             for (CreditType element : this.creditTypes) {
-                if (element.getMoneyType().equals(moneyType)) {
+                if (element.getMoneyType().equals(currencyType.getType())) {
                     result.add(element);
                 }
             }
@@ -75,12 +76,12 @@ public class CreditBank extends Bank {
         return result;
     }
 
-    public List<CreditType> findCreditType(String moneyType, double moneyAmount) {
+    public List<CreditType> findCreditType(CurrencyType currencyType, double moneyAmount) {
         List<CreditType> result = null;
         if (this.creditTypes != null && this.creditTypes.size() > 0) {
             result = new ArrayList<>();
             for (CreditType element : this.creditTypes) {
-                if (element.getMoneyType().equals(moneyType) &&
+                if (element.getMoneyType().equals(currencyType.getType()) &&
                         (moneyAmount >= element.getMinMoneyAmount() &&
                                 moneyAmount <= element.getMaxMoneyAmount())) {
                     result.add(element);
@@ -96,7 +97,7 @@ public class CreditBank extends Bank {
             return;
         }
         if (this.credits != null) {
-            if (!this.credits.contains(operation)) {
+            if (!this.credits.contains((Credit) operation)) {
                 this.credits.add((Credit) operation);
             } else {
                 System.out.println("Credit already exist.");
@@ -168,10 +169,10 @@ public class CreditBank extends Bank {
         System.out.println("Number of credit types in bank: " + this.creditTypes.size());
         System.out.println("Number of credits issued: " + credits.size());
         System.out.println("Bank capital:");
-        System.out.println(super.getUsd().getAmount() + " " + Currency.USD);
-        System.out.println(super.getEur().getAmount() + " " + Currency.EURO);
-        System.out.println(super.getRub().getAmount() + " " + Currency.RUB);
-        System.out.println(super.getByn().getAmount() + " " + Currency.BYN);
+        System.out.println(super.getUsd().getAmount() + " " + CurrencyType.USD.getType());
+        System.out.println(super.getEur().getAmount() + " " + CurrencyType.EURO.getType());
+        System.out.println(super.getRub().getAmount() + " " + CurrencyType.RUB.getType());
+        System.out.println(super.getByn().getAmount() + " " + CurrencyType.BYN.getType());
     }
 
     @Override
