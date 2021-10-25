@@ -18,10 +18,20 @@ import java.util.Objects;
 
 public class BankSystem extends Organization implements Findable {
 
+    private static BankSystem instance;
+
     private List<Bank> banks;
 
-    public BankSystem(String name, Address address, LocalDateTime foundedAt) {
+    private BankSystem(String name, Address address, LocalDateTime foundedAt) {
         super(name, address, foundedAt);
+    }
+
+    public static BankSystem getInstance(String name, Address address, LocalDateTime foundedAt) {
+        if(instance == null) {
+            instance = new BankSystem(name, address, foundedAt);
+            return instance;
+        }
+        return null;
     }
 
     public void setBanks(List<Bank> banks) {

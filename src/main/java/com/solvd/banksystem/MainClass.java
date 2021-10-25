@@ -159,7 +159,9 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////SECOND////////////////////////////\n\n");
         creditBank1.print();
         Address address1 = new Address("New York", "Park Avenue", 1);
-        BankSystem bankSystem = new BankSystem("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
+        BankSystem bankSystem = BankSystem.getInstance("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
+        //Always null because off singletone pattern.
+        BankSystem bankSystem1 = BankSystem.getInstance("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
         bankSystem.addBank(creditBank1);
         bankSystem.addBank(creditBank2);
         bankSystem.addBank(mortgageBank1);
