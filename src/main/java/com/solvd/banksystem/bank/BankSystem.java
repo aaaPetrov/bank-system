@@ -31,7 +31,7 @@ public class BankSystem extends Organization implements Findable {
             instance = new BankSystem(name, address, foundedAt);
             return instance;
         }
-        return null;
+        return instance;
     }
 
     public void setBanks(List<Bank> banks) {
