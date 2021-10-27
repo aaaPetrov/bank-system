@@ -16,9 +16,11 @@ public class WordCounter {
     public static void countWordsInFile(String fromFilePath, String toFilePath) throws IOException {
         File fromFile = new File(fromFilePath);
         String fileString = FileUtils.readFileToString(fromFile, StandardCharsets.UTF_8);
+
         fileString = StringUtils.lowerCase(fileString);
         fileString = StringUtils.replaceChars(fileString, "1234567890,.;!?:\n\r\"", " ");
         List<String> words = Arrays.asList(StringUtils.substringsBetween(fileString, " ", " "));
+
         Map<String, Integer> wordsCount = new HashMap<>();
         for(String word : words) {
             if(wordsCount.containsKey(word)) {
@@ -27,6 +29,7 @@ public class WordCounter {
                 wordsCount.put(word, 1);
             }
         }
+
         File toFile = new File(toFilePath);
         toFile.createNewFile();
         FileUtils.writeLines(toFile,

@@ -5,6 +5,16 @@ import java.util.Objects;
 
 public class Currency extends Value implements Printable {
 
+    private CurrencyType currencyType;
+    private double amount;
+
+    public Currency() {}
+
+    public Currency(double moneyAmount, CurrencyType currencyType) {
+            this.amount = moneyAmount;
+            this.currencyType = currencyType;
+    }
+
     public enum  CurrencyType {
 
         USD("USD"), EURO("EUR"), RUB("RUB"), BYN("BYN");
@@ -19,16 +29,6 @@ public class Currency extends Value implements Printable {
             return type;
         }
 
-    }
-
-    private CurrencyType currencyType;
-    private double amount;
-
-    public Currency() {}
-
-    public Currency(double moneyAmount, CurrencyType currencyType) {
-            this.amount = moneyAmount;
-            this.currencyType = currencyType;
     }
 
     public void setAmount(double moneyAmount) {

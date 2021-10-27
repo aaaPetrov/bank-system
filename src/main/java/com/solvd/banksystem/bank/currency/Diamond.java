@@ -5,6 +5,21 @@ import java.util.Objects;
 
 public class Diamond extends Value {
 
+    private double carats;
+    private Currency pricePerCarat;
+    private String color;
+    private Clarity clarity;
+
+    public Diamond(double carats, Currency pricePerCarat, String color, Clarity clarity) {
+            this.carats = carats;
+            this.pricePerCarat = pricePerCarat;
+            this.color = color;
+            this.clarity = clarity;
+    }
+
+    public Diamond() {
+    }
+
     public enum Clarity {
 
         A(1.5), B(1.3), C(1.1), D(1.0);
@@ -19,21 +34,6 @@ public class Diamond extends Value {
             return clarityCoefficient;
         }
 
-    }
-
-    private double carats;
-    private Currency pricePerCarat;
-    private String color;
-    private Clarity clarity;
-
-    public Diamond(double carats, Currency pricePerCarat, String color, Clarity clarity) {
-            this.carats = carats;
-            this.pricePerCarat = pricePerCarat;
-            this.color = color;
-            this.clarity = clarity;
-    }
-
-    public Diamond() {
     }
 
     public double getCarats() {

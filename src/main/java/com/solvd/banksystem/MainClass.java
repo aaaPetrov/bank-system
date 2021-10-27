@@ -16,7 +16,6 @@ import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -377,7 +376,7 @@ public class MainClass {
 
         System.out.println("\n\n/////////////////////////////////FIFTEENTH////////////////////////////\n\n");
         JeweleryBank<Gold> jeweleryBank = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
-        Gold gold1 = new Gold(100, Gold.Content.С999);
+        Gold gold1 = new Gold(100, Gold.Content.C999);
         Gold gold2 = new Gold(150, Gold.Content.C916);
         Contribution<Gold> goldContribution1 = new Contribution<>(gold1);
         Contribution<Gold> goldContribution2 = new Contribution<>(gold2);

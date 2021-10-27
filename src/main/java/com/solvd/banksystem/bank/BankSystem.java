@@ -34,10 +34,6 @@ public class BankSystem extends Organization implements Findable {
         return instance;
     }
 
-    public void setBanks(List<Bank> banks) {
-        this.banks = banks;
-    }
-
     public List<Bank> getBanks() {
         return banks;
     }
@@ -209,5 +205,9 @@ public class BankSystem extends Organization implements Findable {
         return Objects.hash(Exchangable.USD_BUY, Exchangable.USD_SELL, Exchangable.EURO_SELL, Exchangable.EURO_BUY,
                 Exchangable.RUB_BUY, Exchangable.RUB_SELL, banks, getName(),
                 getFoundedAt(), getAddress());
+    }
+
+    public void setBanks(List<Bank> banks) {
+        this.banks = banks;
     }
 }

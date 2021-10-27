@@ -5,8 +5,19 @@ import java.util.Objects;
 
 public class Gold extends Value {
 
+    private double weight;
+    private Content content;
+
+    public Gold(double weight, Content content) {
+            this.weight = weight;
+            this.content = content;
+    }
+
+    public Gold() {
+    }
+
     public enum Content {
-        С999(127.51),
+        C999(127.51),
         C958(122.15),
         C950(121.13),
         C916(116.80),
@@ -24,17 +35,6 @@ public class Gold extends Value {
             return pricePerGram;
         }
 
-    }
-
-    private double weight;
-    private Content content;
-
-    public Gold(double weight, Content content) {
-            this.weight = weight;
-            this.content = content;
-    }
-
-    public Gold() {
     }
 
     public double getWeight() {
