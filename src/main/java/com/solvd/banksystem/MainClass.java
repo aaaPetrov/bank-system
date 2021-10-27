@@ -16,6 +16,8 @@ import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -434,6 +436,13 @@ public class MainClass {
         jeweleryBank2.addContribution(client2, goldContribution1);
         Contribution<? extends Value> searched2 = jeweleryBank2.findContribution(client2);
         searched2.print();
+
+        //WORD COUNTER
+        try {
+            WordCounter.countWordsInFile("./src/main/resources/Text.txt", "./src/main/java/com/solvd/banksystem/WordCount.txt");
+        } catch (IOException exception) {
+            LOGGER.error(exception.getMessage());
+        }
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
