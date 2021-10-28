@@ -33,7 +33,6 @@ public class JeweleryBank<T extends Value> extends Organization {
         } else {
             this.contributions.put(client, contribution);
         }
-
     }
 
     public Contribution<? extends Value> findContribution(Client client) {
@@ -47,7 +46,6 @@ public class JeweleryBank<T extends Value> extends Organization {
     public double amountOfDeposits() {
         double resultAmount = 0;
         for (Map.Entry<Client,Contribution<? extends Value>> entry : this.contributions.entrySet()) {
-
             if(Currency.CurrencyType.USD.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 resultAmount += entry.getValue().getInvested().getValue().getAmount();
             } else if(Currency.CurrencyType.EURO.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
