@@ -26,14 +26,6 @@ public class BankSystem extends Organization implements Findable {
         super(name, address, foundedAt);
     }
 
-    public static BankSystem getInstance(String name, Address address, LocalDateTime foundedAt) {
-        if(instance == null) {
-            instance = new BankSystem(name, address, foundedAt);
-            return instance;
-        }
-        return instance;
-    }
-
     public List<Bank> getBanks() {
         return banks;
     }
@@ -205,6 +197,14 @@ public class BankSystem extends Organization implements Findable {
         return Objects.hash(Exchangable.USD_BUY, Exchangable.USD_SELL, Exchangable.EURO_SELL, Exchangable.EURO_BUY,
                 Exchangable.RUB_BUY, Exchangable.RUB_SELL, banks, getName(),
                 getFoundedAt(), getAddress());
+    }
+
+    public static BankSystem getInstance(String name, Address address, LocalDateTime foundedAt) {
+        if(instance == null) {
+            instance = new BankSystem(name, address, foundedAt);
+            return instance;
+        }
+        return instance;
     }
 
     public void setBanks(List<Bank> banks) {
