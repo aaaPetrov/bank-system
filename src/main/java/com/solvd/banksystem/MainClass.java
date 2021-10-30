@@ -446,14 +446,17 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////LAMBDA////////////////////////////\n\n");
         Printable printable = () -> {
             JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
-            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond);
+            Gold gold3 = new Gold(100, Gold.Content.C999);
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
+            Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
             Client client10 = null;
             Client client11 = null;
             try {
                 client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
                 client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
-                jeweleryBank3.addContribution(client10,diamondContribution1);
-                jeweleryBank2.addContribution(client11, goldContribution1);
+                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client11, goldContribution3);
                 Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
                 searched2.print();
             } catch (InvalidHumanDataException exception) {
@@ -465,14 +468,17 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////OTHER VARIATION OF LAMBDA////////////////////////////\n\n");
         printerMethod(() -> {
             JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
-            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond);
+            Gold gold3 = new Gold(100, Gold.Content.C999);
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
+            Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
             Client client10 = null;
             Client client11 = null;
             try {
                 client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
                 client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
-                jeweleryBank3.addContribution(client10,diamondContribution1);
-                jeweleryBank2.addContribution(client11, goldContribution1);
+                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client11, goldContribution3);
                 Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
                 searched2.print();
             } catch (InvalidHumanDataException exception) {
@@ -482,7 +488,15 @@ public class MainClass {
 
         System.out.println("\n\n/////////////////////////////////ANOTHER VARIATION OF LAMBDA////////////////////////////\n\n");
         payTax(() -> {
-            System.out.println("I paid some tax.");
+            System.out.println("I paid some tax with Lambda.");
+        });
+
+        System.out.println("\n\n/////////////////////////////////THE SAME WITH UNNAMED CLASS////////////////////////////\n\n");
+        payTax(new TaxPayable() {
+            @Override
+            public void payTax() {
+                System.out.println("I paid some tax with Unnamed Class.");
+            }
         });
     }
 
@@ -536,11 +550,4 @@ public class MainClass {
         }
         return findable.find(human);
     }
-}
-
-@FunctionalInterface
-interface Functionable {
-
-    double function(double a, double b, double c);
-
 }
