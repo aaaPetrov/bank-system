@@ -33,7 +33,6 @@ public class JeweleryBank<T extends Value> extends Organization {
         } else {
             this.contributions.put(client, contribution);
         }
-
     }
 
     public Contribution<? extends Value> findContribution(Client client) {
