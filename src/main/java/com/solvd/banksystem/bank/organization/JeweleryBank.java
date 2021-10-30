@@ -44,8 +44,28 @@ public class JeweleryBank<T extends Value> extends Organization {
     }
 
     public double amountOfDeposits() {
-        double resultAmount = 0;
-        for (Map.Entry<Client,Contribution<? extends Value>> entry : this.contributions.entrySet()) {
+        double resultAmount = 0.0;
+        resultAmount += this.contributions.entrySet().stream()
+                .filter(entry -> Currency.CurrencyType.USD.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType()))
+                .map(entry -> entry.getValue().getInvested().getValue().getAmount())
+                .reduce((result, element) -> result + element)
+                .orElse(0.0);
+        resultAmount += this.contributions.entrySet().stream()
+                .filter(entry -> Currency.CurrencyType.EURO.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType()))
+                .map(entry -> entry.getValue().getInvested().getValue().getAmount() * Exchangable.EURO_TO_USD)
+                .reduce((result, element) -> result + element)
+                .orElse(0.0);
+        resultAmount += this.contributions.entrySet().stream()
+                .filter(entry -> Currency.CurrencyType.RUB.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType()))
+                .map(entry -> entry.getValue().getInvested().getValue().getAmount() * Exchangable.RUB_TO_USD)
+                .reduce((result, element) -> result + element)
+                .orElse(0.0);
+        resultAmount += this.contributions.entrySet().stream()
+                .filter(entry -> Currency.CurrencyType.BYN.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType()))
+                .map(entry -> entry.getValue().getInvested().getValue().getAmount() / Exchangable.USD_BUY)
+                .reduce((result, element) -> result + element)
+                .orElse(0.0);
+       /* for (Map.Entry<Client,Contribution<? extends Value>> entry : this.contributions.entrySet()) {
             if(Currency.CurrencyType.USD.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 resultAmount += entry.getValue().getInvested().getValue().getAmount();
             } else if(Currency.CurrencyType.EURO.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
@@ -58,7 +78,7 @@ public class JeweleryBank<T extends Value> extends Organization {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() / Exchangable.USD_BUY;
                 resultAmount += converted;
             }
-        }
+        }*/
         return resultAmount;
     }
 

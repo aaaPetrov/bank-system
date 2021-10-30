@@ -498,12 +498,16 @@ public class MainClass {
                 System.out.println("I paid some tax with Unnamed Class.");
             }
         });
+
+        jeweleryBank.amountOfDeposits();
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
-        for (BankOperation bankOperation : bankOperations) {
+        bankOperations.stream()
+                .forEach(bankOperation -> bankOperation.print());
+        /*for (BankOperation bankOperation : bankOperations) {
             bankOperation.print();
-        }
+        }*/
     }
 
     private static void payTax(TaxPayable taxPayable) {
@@ -515,9 +519,11 @@ public class MainClass {
     }
 
     private static void printerMethod(List<? extends Printable> printables) {
-        for (Printable element : printables) {
+        printables.stream()
+                .forEach(printable -> printable.print());
+        /*for (Printable element : printables) {
             element.print();
-        }
+        }*/
     }
 
     public static Currency exchangeToUsd(Exchangable exchangable, Currency currency) {
