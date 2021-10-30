@@ -2,9 +2,10 @@ package com.solvd.banksystem.bankoperation;
 
 import com.solvd.banksystem.bank.currency.Currency;
 import com.solvd.banksystem.bank.currency.Value;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.time.LocalDate;
 import java.util.Objects;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class SafeBox<T extends Value> implements Printable {
 
@@ -12,7 +13,7 @@ public class SafeBox<T extends Value> implements Printable {
     private final LocalDate opened;
     private final int storageTimeInMonth;
     private final LocalDate closed;
-    private Currency pricePerMonth = new Currency(100, Currency.USD);
+    private Currency pricePerMonth = new Currency(100, CurrencyType.USD);
 
     public SafeBox(T deposit, int storageTimeInMonth) {
         this.deposit = deposit;
@@ -49,9 +50,9 @@ public class SafeBox<T extends Value> implements Printable {
     public void print() {
         System.out.println("Deposit:");
         deposit.print();
-        System.out.println("\nStorage period: " + opened.getDayOfMonth() + "." + opened.getMonth() + "." + opened.getYear()
+        System.out.println("Storage period: " + opened.getDayOfMonth() + "." + opened.getMonth() + "." + opened.getYear()
                             + " - " + closed.getDayOfMonth() + "." + closed.getMonth() + "." + closed.getYear() + ".");
-        System.out.println("Storage cost: " + pricePerMonth.getAmount() * storageTimeInMonth + " " + pricePerMonth.getType());
+        System.out.println("Storage cost: " + pricePerMonth.getAmount() * storageTimeInMonth + " " + pricePerMonth.getCurrencyType());
     }
 
     @Override

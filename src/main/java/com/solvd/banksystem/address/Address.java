@@ -1,6 +1,6 @@
 package com.solvd.banksystem.address;
 
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.util.Objects;
 
 public class Address implements Printable {

@@ -1,7 +1,8 @@
 package com.solvd.banksystem.bankoperation;
 
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.util.Objects;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class CreditType implements Printable {
 
@@ -14,14 +15,14 @@ public class CreditType implements Printable {
     private double minMoneyAmount;
     private double maxMoneyAmount;
 
-    public CreditType(String creditName, String moneyType, int termInYears, double yearPercent, double minMoneyAmount, double maxMoneyAmount) {
+    public CreditType(String creditName, CurrencyType currencyType, int termInYears, double yearPercent, double minMoneyAmount, double maxMoneyAmount) {
         this.creditName = creditName;
-        this.moneyType = moneyType;
+        this.moneyType = currencyType.getType();
         this.yearPercent = yearPercent;
         this.termInYears = termInYears;
         this.minMoneyAmount = minMoneyAmount;
         this.maxMoneyAmount = maxMoneyAmount;
-        this.count++;
+        count++;
     }
 
     public void setCreditName(String creditName) {

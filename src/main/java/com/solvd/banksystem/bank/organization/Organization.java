@@ -1,7 +1,7 @@
 package com.solvd.banksystem.bank.organization;
 
 import com.solvd.banksystem.address.Address;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

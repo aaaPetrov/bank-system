@@ -3,7 +3,7 @@ package com.solvd.banksystem.bank.employee;
 import com.solvd.banksystem.bank.currency.Currency;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -33,7 +33,7 @@ public class Employee extends Human implements Printable {
     public void print() {
         System.out.println("Employee: " + super.getLastName() + " " + super.getFirstName());
         System.out.println("Position: " + position);
-        System.out.println("Salary: " + salary.getAmount() + " " + salary.getType());
+        System.out.println("Salary: " + salary.getAmount() + " " + salary.getCurrencyType());
         System.out.println("Born: " + super.getBirthday().getDayOfMonth() + "." +
                 super.getBirthday().getMonth() + "." + super.getBirthday().getYear());
         System.out.println("Age: " + super.getAge());

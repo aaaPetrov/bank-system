@@ -10,11 +10,11 @@ public class FileWriter implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger(FileWriter.class);
 
-    private File file;
+    private final File file;
     private FileOutputStream fileOutputStream;
 
     public FileWriter() {
-        this.file = new File("./src/main/java/com/solvd/homework7/", "1.txt");
+        this.file = new File("./src/main/java/com/solvd/banksystem/", "1.txt");
         try {
             this.file.createNewFile();
             this.fileOutputStream = new FileOutputStream(file, true);

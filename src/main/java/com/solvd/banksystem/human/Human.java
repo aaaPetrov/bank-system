@@ -1,7 +1,7 @@
 package com.solvd.banksystem.human;
 
 import com.solvd.banksystem.exception.InvalidHumanDataException;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;

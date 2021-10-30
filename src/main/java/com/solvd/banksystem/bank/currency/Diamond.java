@@ -8,21 +8,32 @@ public class Diamond extends Value {
     private double carats;
     private Currency pricePerCarat;
     private String color;
-    private char clarity;
+    private Clarity clarity;
 
-    public Diamond(double carats, Currency pricePerCarat, String color, char clarity) {
-        if (pricePerCarat.getType().equals("USD") || pricePerCarat.getType().equals("EUR")
-                || pricePerCarat.getType().equals("RUB") || pricePerCarat.getType().equals("BYN")) {
+    public Diamond(double carats, Currency pricePerCarat, String color, Clarity clarity) {
             this.carats = carats;
             this.pricePerCarat = pricePerCarat;
             this.color = color;
             this.clarity = clarity;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
     }
 
     public Diamond() {
+    }
+
+    public enum Clarity {
+
+        A(1.5), B(1.3), C(1.1), D(1.0);
+
+        private final double clarityCoefficient;
+
+        Clarity(double clarityCoefficient) {
+            this.clarityCoefficient = clarityCoefficient;
+        }
+
+        public double getClarityCoefficient() {
+            return clarityCoefficient;
+        }
+
     }
 
     public double getCarats() {
@@ -38,12 +49,7 @@ public class Diamond extends Value {
     }
 
     public void setPricePerCarat(Currency pricePerCarat) {
-        if (pricePerCarat.getType().equals("USD") || pricePerCarat.getType().equals("EUR")
-                || pricePerCarat.getType().equals("RUB") || pricePerCarat.getType().equals("BYN")) {
             this.pricePerCarat = pricePerCarat;
-        } else {
-            throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
-        }
     }
 
     public String getColor() {
@@ -54,43 +60,23 @@ public class Diamond extends Value {
         this.color = color;
     }
 
-    public char getClarity() {
+    public Clarity getClarity() {
         return clarity;
     }
 
-    public void setClarity(char clarity) {
+    public void setClarity(Clarity clarity) {
         this.clarity = clarity;
     }
 
     @Override
     public Currency getValue() {
-        double clarityCoefficient;
-        if (this.clarity == 'A') {
-            clarityCoefficient = 1.5;
-        } else if (this.clarity == 'B') {
-            clarityCoefficient = 1.3;
-        } else if (this.clarity == 'C') {
-            clarityCoefficient = 1.1;
-        } else {
-            clarityCoefficient = 1;
-        }
-        return new Currency(carats * pricePerCarat.getAmount() * clarityCoefficient, pricePerCarat.getType());
+        return new Currency(carats * pricePerCarat.getAmount() * clarity.getClarityCoefficient(), pricePerCarat.getCurrencyType());
     }
 
     @Override
     public void setValue(Currency currency) {
-        double clarityCoefficient;
-        if (this.clarity == 'A') {
-            clarityCoefficient = 1.5;
-        } else if (this.clarity == 'B') {
-            clarityCoefficient = 1.3;
-        } else if (this.clarity == 'C') {
-            clarityCoefficient = 1.1;
-        } else {
-            clarityCoefficient = 1;
-        }
-        if (currency.getType().equals(pricePerCarat.getType())) {
-            this.carats = currency.getAmount() / pricePerCarat.getAmount() / clarityCoefficient;
+        if (currency.getCurrencyType().getType().equals(pricePerCarat.getCurrencyType().getType())) {
+            this.carats = currency.getAmount() / pricePerCarat.getAmount() / clarity.getClarityCoefficient();
         } else {
             throw new InvalidCurrencyTypeException("Runtime Exception: Invalid Currency Type.");
         }
@@ -109,26 +95,16 @@ public class Diamond extends Value {
 
     @Override
     public void print() {
-        double clarityCoefficient;
-        if (this.clarity == 'A') {
-            clarityCoefficient = 1.5;
-        } else if (this.clarity == 'B') {
-            clarityCoefficient = 1.3;
-        } else if (this.clarity == 'C') {
-            clarityCoefficient = 1.1;
-        } else {
-            clarityCoefficient = 1;
-        }
-        System.out.println(color + " color diamond \"" + clarity + "\" clarity.");
-        System.out.println(carats + " carats, " + pricePerCarat.getAmount() * clarityCoefficient + " "
-                + pricePerCarat.getType() + " per carat.");
-        System.out.println("Total cost: " + getValue().getAmount() + " " + getValue().getType());
+        System.out.println(color + " color diamond \"" + clarity.name() + "\" clarity.");
+        System.out.println(carats + " carats, " + pricePerCarat.getAmount() * clarity.getClarityCoefficient() + " "
+                + pricePerCarat.getCurrencyType() + " per carat.");
+        System.out.println("Total cost: " + getValue().getAmount() + " " + getValue().getCurrencyType());
     }
 
     @Override
     public String toString() {
         return "Class Diamond [carats = " + carats + ", pricePerCarat = " +
-                pricePerCarat + ", color = " + color + ", clarity = " + clarity + "]";
+                pricePerCarat + ", color = " + color + ", clarity = " + clarity.name() + "]";
     }
 
     @Override
@@ -141,7 +117,7 @@ public class Diamond extends Value {
         }
         Diamond diamond = (Diamond) object;
         return carats == diamond.getCarats() && pricePerCarat.equals(diamond.getPricePerCarat())
-                && (color != null && color.equals(diamond.getColor())) && clarity == diamond.getClarity();
+                && (color != null && color.equals(diamond.getColor())) && clarity.name().equals(diamond.getClarity().name());
     }
 
     @Override

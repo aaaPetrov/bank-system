@@ -1,6 +1,6 @@
 package com.solvd.banksystem;
 
-import bankoperation.сlient.work.Work;
+import com.solvd.banksystem.bankoperation.client.work.Work;
 import com.solvd.banksystem.address.Address;
 import com.solvd.banksystem.bank.*;
 import com.solvd.banksystem.bank.currency.Currency;
@@ -13,16 +13,17 @@ import com.solvd.banksystem.bank.organization.TaxPayable;
 import com.solvd.banksystem.bankoperation.*;
 import com.solvd.banksystem.bankoperation.client.Client;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
-import com.solvd.banksystem.exception.InvalidCurrencyTypeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class MainClass {
 
@@ -32,22 +33,22 @@ public class MainClass {
         System.out.println("\n\n///////////////////////////////////////////////////////////////////\n\n");
         // we can create Currency objects which can throw an exception,
         // but we don't need to catch them.
-        Currency byn1 = new Currency(1000000, Currency.BYN);
-        Currency rub1 = new Currency(1250000, Currency.RUB);
-        Currency eur1 = new Currency(150000, Currency.EURO);
-        Currency usd1 = new Currency(175000, Currency.USD);
-        Currency byn2 = new Currency(2000000, Currency.BYN);
-        Currency eur2 = new Currency(250000, Currency.EURO);
-        Currency usd2 = new Currency(275000, Currency.USD);
-        Currency rub2 = new Currency(2250000, Currency.RUB);
-        Currency byn3 = new Currency(3000000, Currency.BYN);
-        Currency rub3 = new Currency(3250000, Currency.RUB);
-        Currency eur3 = new Currency(350000, Currency.EURO);
-        Currency usd3 = new Currency(375000, Currency.USD);
-        Currency byn4 = new Currency(4000000, Currency.BYN);
-        Currency rub4 = new Currency(4250000, Currency.RUB);
-        Currency eur4 = new Currency(450000, Currency.EURO);
-        Currency usd4 = new Currency(475000, Currency.USD);
+        Currency byn1 = new Currency(1000000, CurrencyType.BYN);
+        Currency rub1 = new Currency(1250000, CurrencyType.RUB);
+        Currency eur1 = new Currency(150000, CurrencyType.EURO);
+        Currency usd1 = new Currency(175000, CurrencyType.USD);
+        Currency byn2 = new Currency(2000000, CurrencyType.BYN);
+        Currency eur2 = new Currency(250000, CurrencyType.EURO);
+        Currency usd2 = new Currency(275000, CurrencyType.USD);
+        Currency rub2 = new Currency(2250000, CurrencyType.RUB);
+        Currency byn3 = new Currency(3000000, CurrencyType.BYN);
+        Currency rub3 = new Currency(3250000, CurrencyType.RUB);
+        Currency eur3 = new Currency(350000, CurrencyType.EURO);
+        Currency usd3 = new Currency(375000, CurrencyType.USD);
+        Currency byn4 = new Currency(4000000, CurrencyType.BYN);
+        Currency rub4 = new Currency(4250000, CurrencyType.RUB);
+        Currency eur4 = new Currency(450000, CurrencyType.EURO);
+        Currency usd4 = new Currency(475000, CurrencyType.USD);
 
         Address adr1 = new Address("Minsk", "Lenina", 3);
         Address adr2 = new Address("Moscow", "Old Arbat", 12);
@@ -66,37 +67,37 @@ public class MainClass {
         MortgageBank mortgageBank2 = new MortgageBank("Absolute", adr4,
                 LocalDateTime.of(1886, Month.DECEMBER, 31, 23, 59), usd4, eur4, rub4, byn4);
 
-        Work work1 = new Work("Google", "Sales Manager", 6500, Currency.USD);
-        Work work2 = new Work("KFC", "Restaurant Crew", 850, Currency.BYN);
-        Work work3 = new Work("Adidas", "Production Line Engineer", 2800, Currency.EURO);
+        Work work1 = new Work("Google", "Sales Manager", 6500, CurrencyType.USD);
+        Work work2 = new Work("KFC", "Restaurant Crew", 850, CurrencyType.BYN);
+        Work work3 = new Work("Adidas", "Production Line Engineer", 2800, CurrencyType.EURO);
 
 
         CreditType creditType1 = new CreditType(
-                "Elementary USD", Currency.USD, 1, 12, 1000, 2000);
+                "Elementary USD", CurrencyType.USD, 1, 12, 1000, 2000);
         CreditType creditType2 = new CreditType(
-                "Light USD", Currency.USD, 1, 9, 2000, 5000);
+                "Light USD", CurrencyType.USD, 1, 9, 2000, 5000);
         CreditType creditType3 = new CreditType(
-                "Medium USD", Currency.USD, 2, 8, 5000, 10000);
+                "Medium USD", CurrencyType.USD, 2, 8, 5000, 10000);
         CreditType creditType4 = new CreditType(
-                "High USD", Currency.USD, 3, 7, 10000, 20000);
+                "High USD", CurrencyType.USD, 3, 7, 10000, 20000);
         CreditType creditType5 = new CreditType(
-                "Inescapable USD", Currency.USD, 5, 7, 20000, 50000);
+                "Inescapable USD", CurrencyType.USD, 5, 7, 20000, 50000);
         CreditType creditType6 = new CreditType(
-                "Light EURO", Currency.EURO, 2, 17, 1000, 6000);
+                "Light EURO", CurrencyType.EURO, 2, 17, 1000, 6000);
         CreditType creditType7 = new CreditType(
-                "Medium EURO", Currency.EURO, 2, 14, 6000, 15000);
+                "Medium EURO", CurrencyType.EURO, 2, 14, 6000, 15000);
         CreditType creditType8 = new CreditType(
-                "High EURO", Currency.EURO, 2, 11, 15000, 30000);
+                "High EURO", CurrencyType.EURO, 2, 11, 15000, 30000);
         CreditType creditType9 = new CreditType(
-                "Light RUB", Currency.RUB, 1, 25, 70000, 210000);
+                "Light RUB", CurrencyType.RUB, 1, 25, 70000, 210000);
         CreditType creditType10 = new CreditType(
-                "Medium RUB", Currency.RUB, 3, 23, 210000, 400000);
+                "Medium RUB", CurrencyType.RUB, 3, 23, 210000, 400000);
         CreditType creditType11 = new CreditType(
-                "High RUB", Currency.RUB, 5, 20, 400000, 1000000);
+                "High RUB", CurrencyType.RUB, 5, 20, 400000, 1000000);
         CreditType creditType13 = new CreditType(
-                "Medium BYN", Currency.BYN, 1, 8, 20000, 50000);
+                "Medium BYN", CurrencyType.BYN, 1, 8, 20000, 50000);
         CreditType creditType14 = new CreditType(
-                "High BYN", Currency.BYN, 2, 11, 50000, 150000);
+                "High BYN", CurrencyType.BYN, 2, 11, 50000, 150000);
 
         creditBank1.addCreditType(creditType1);
         creditBank1.addCreditType(creditType2);
@@ -159,32 +160,32 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////SECOND////////////////////////////\n\n");
         creditBank1.print();
         Address address1 = new Address("New York", "Park Avenue", 1);
-        BankSystem bankSystem = new BankSystem("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
+        BankSystem bankSystem = BankSystem.getInstance("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
+        //Always null because off singletone pattern.
+        BankSystem bankSystem1 = BankSystem.getInstance("Unions", address1, LocalDateTime.of(1934, Month.MARCH, 8, 18, 0));
         bankSystem.addBank(creditBank1);
         bankSystem.addBank(creditBank2);
         bankSystem.addBank(mortgageBank1);
         bankSystem.addBank(mortgageBank2);
 
         System.out.println("\n\n/////////////////////////////////THIRD////////////////////////////\n\n");
-        bankSystem.searchForCreditType("USD");
-        bankSystem.searchForCreditType(Currency.USD, 1500);
-        bankSystem.searchForCreditType(Currency.EURO, 300);
-        bankSystem.searchForCreditType("qwe");
-        bankSystem.searchForCreditType("123", 50000);
-        bankSystem.searchForCreditType(Currency.USD, 1500000);
+        bankSystem.searchForCreditType(CurrencyType.USD);
+        bankSystem.searchForCreditType(CurrencyType.USD, 1500);
+        bankSystem.searchForCreditType(CurrencyType.EURO, 300);
+        bankSystem.searchForCreditType(CurrencyType.USD, 1500000);
 
         System.out.println("\n\n/////////////////////////////////FOURTH////////////////////////////\n\n");
         BankSystem.exchangeRates();
 
         System.out.println("\n\n/////////////////////////////////FIFTH////////////////////////////\n\n");
-        bankSystem.searchForCreditType(Currency.BYN);
+        bankSystem.searchForCreditType(CurrencyType.BYN);
         creditBank1.removeCreditType(creditType14);
-        bankSystem.searchForCreditType(Currency.BYN);
+        bankSystem.searchForCreditType(CurrencyType.BYN);
 
         System.out.println("\n\n/////////////////////////////////SIXTH////////////////////////////\n\n");
-        Work work4 = new Work("Microsoft", "Programming Engineer", 12500, Currency.USD);
-        Work work5 = new Work("McDonald's", "Restaurant Crew", 1050, Currency.BYN);
-        Work work6 = new Work("Turkish Airlines", "Pilot", 2100, Currency.EURO);
+        Work work4 = new Work("Microsoft", "Programming Engineer", 12500, CurrencyType.USD);
+        Work work5 = new Work("McDonald's", "Restaurant Crew", 1050, CurrencyType.BYN);
+        Work work6 = new Work("Turkish Airlines", "Pilot", 2100, CurrencyType.EURO);
 
         Client client4 = null;
         Client client5 = null;
@@ -192,9 +193,9 @@ public class MainClass {
         Mortgage mortgage1 = null;
         Mortgage mortgage2 = null;
         Mortgage mortgage3 = null;
-        MortgagedApartment apartment1 = new MortgagedApartment(adr5, 39, new Currency(185000, Currency.EURO));
-        MortgagedApartment apartment2 = new MortgagedApartment(adr6, 13, new Currency(240000, Currency.EURO));
-        MortgagedApartment apartment3 = new MortgagedApartment(adr7, 47, new Currency(110000, Currency.RUB));
+        MortgagedApartment apartment1 = new MortgagedApartment(adr5, 39, new Currency(185000, CurrencyType.EURO));
+        MortgagedApartment apartment2 = new MortgagedApartment(adr6, 13, new Currency(240000, CurrencyType.EURO));
+        MortgagedApartment apartment3 = new MortgagedApartment(adr7, 47, new Currency(110000, CurrencyType.RUB));
 
         try {
             client4 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
@@ -251,7 +252,7 @@ public class MainClass {
         bankSystem.payTax();
 
         System.out.println("\n\n/////////////////////////////////NINTH////////////////////////////\n\n");
-        Work work7 = new Work("Oxford", "Professor", 3400, Currency.USD);
+        Work work7 = new Work("Oxford", "Professor", 3400, CurrencyType.USD);
         Client client7 = null;
         try {
             client7 = new Client("Mick", "Flick", LocalDateTime.of(2001, Month.JANUARY, 14, 1, 15), work7);
@@ -270,8 +271,8 @@ public class MainClass {
         creditBank2.add(credit6);
 
         Address adr8 = new Address("Warshaw", "Nowy Swiat", 11);
-        MortgagedApartment apartment4 = new MortgagedApartment(adr8, 24, new Currency(95000, Currency.EURO));
-        MortgagedApartment apartment5 = new MortgagedApartment(adr8, 13, new Currency(400000, Currency.USD));
+        MortgagedApartment apartment4 = new MortgagedApartment(adr8, 24, new Currency(95000, CurrencyType.EURO));
+        MortgagedApartment apartment5 = new MortgagedApartment(adr8, 13, new Currency(400000, CurrencyType.USD));
         Mortgage mortgage4 = new Mortgage(client7, apartment4);
         Mortgage mortgage5 = new Mortgage(client7, apartment5);
         mortgageBank1.add(mortgage4);
@@ -307,19 +308,19 @@ public class MainClass {
         printerMethod(operations3);
 
         System.out.println("\nEXCHANGE METHOD: \n");
-        Currency currencyUsd = new Currency(200, Currency.USD);
+        Currency currencyUsd = new Currency(200, CurrencyType.USD);
         Currency currencyByn = exchangeToByn(creditBank1, currencyUsd);
         System.out.println("USD to BYN exchange:");
         printerMethod(currencyUsd);
         printerMethod(currencyByn);
         System.out.println("\nRUB to EURO exchange:");
-        Currency currencyRub = new Currency(90000, Currency.RUB);
+        Currency currencyRub = new Currency(90000, CurrencyType.RUB);
         Currency currencyEuro = exchangeToEuro(mortgageBank2, currencyRub);
         printerMethod(currencyRub);
         printerMethod(currencyEuro);
 
         System.out.println("\n\n/////////////////////////////////ELEVENTH////////////////////////////\n\n");
-        Work work8 = new Work("Dunkin Donates", "Cook", 3000, Currency.USD);
+        Work work8 = new Work("Dunkin Donates", "Cook", 3000, CurrencyType.USD);
         Client client8 = null;
         try {
             client8 = new Client("Felix", "Irvin", LocalDateTime.of(2003, Month.FEBRUARY, 12, 14, 43), work8);
@@ -339,29 +340,15 @@ public class MainClass {
         remove(creditBank2, credit7);
         printerMethod(find(creditBank2, client8));
 
-        Currency invalidCurrency = null;
-        System.out.println("\n\n/////////////////////////////////TWELFTH////////////////////////////\n\n");
-        try {
-            invalidCurrency = new Currency(100, "ABVGD");
-        } catch (InvalidCurrencyTypeException exception) {
-            LOGGER.error(exception.getMessage());
-        } finally {
-            if (invalidCurrency != null) {
-                LOGGER.info("Currency created.");
-            } else {
-                LOGGER.error("Currency error.");
-            }
-        }
-
         System.out.println("\n\n/////////////////////////////////THIRTEENTH////////////////////////////\n\n");
         try (FileWriter fileWriter = new FileWriter()) {
             fileWriter.write("Hello!\n");
         }
 
         System.out.println("\n\n/////////////////////////////////FOURTEENTH////////////////////////////\n\n");
-        Work work9 = new Work("Baskin Robbins", "Ice-Cream Cook", 2800, Currency.USD);
+        Work work9 = new Work("Baskin Robbins", "Ice-Cream Cook", 2800, CurrencyType.USD);
         Address adr9 = new Address("Los Angeles", "Rodeo Drive", 5);
-        MortgagedApartment apartment6 = new MortgagedApartment(adr9, 24, new Currency(95000, Currency.EURO));
+        MortgagedApartment apartment6 = new MortgagedApartment(adr9, 24, new Currency(95000, CurrencyType.EURO));
         Client client9 = null;
         Mortgage mortgage6 = null;
         try {
@@ -389,8 +376,8 @@ public class MainClass {
 
         System.out.println("\n\n/////////////////////////////////FIFTEENTH////////////////////////////\n\n");
         JeweleryBank<Gold> jeweleryBank = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
-        Gold gold1 = new Gold(100, new Currency(127.51, Currency.BYN), 999);
-        Gold gold2 = new Gold(150, new Currency(122.15, Currency.BYN), 958);
+        Gold gold1 = new Gold(100, Gold.Content.C999);
+        Gold gold2 = new Gold(150, Gold.Content.C916);
         Contribution<Gold> goldContribution1 = new Contribution<>(gold1);
         Contribution<Gold> goldContribution2 = new Contribution<>(gold2);
 
@@ -403,13 +390,13 @@ public class MainClass {
         try {
             Employee employee1 = new Employee("Tom", "Bom",
                     LocalDateTime.of(1990, Month.SEPTEMBER, 1, 12, 15),
-                    "Trader", new Currency(5000, Currency.USD));
+                    "Trader", new Currency(5000, CurrencyType.USD));
             Employee employee2 = new Employee("Sam", "Fam",
                     LocalDateTime.of(1992, Month.OCTOBER, 7, 16, 41),
-                    "Trader", new Currency(5000, Currency.USD));
+                    "Trader", new Currency(5000, CurrencyType.USD));
             Employee employee3 = new Employee("Max", "Pax",
                     LocalDateTime.of(1995, Month.NOVEMBER, 14, 18, 6),
-                    "Broker", new Currency(20000, Currency.USD));
+                    "Broker", new Currency(20000, CurrencyType.USD));
 
             List<Employee> employees = new ArrayList<>();
             employees.add(employee1);
@@ -429,17 +416,18 @@ public class MainClass {
         }
 
         System.out.println("\n\n/////////////////////////////////SEVENTEENTH////////////////////////////\n\n");
-        Gold gold = new Gold(500, new Currency(127.51, Currency.BYN), 999);
+        Gold gold = new Gold(500, Gold.Content.C950);
         SafeBox<? extends Value> goldSafeBox = new SafeBox<>(gold, 3);
-        Diamond diamond = new Diamond(20, new Currency(500, Currency.BYN), "White", 'A');
+        Diamond diamond = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
         SafeBox<? extends Value> diamondSafeBox = new SafeBox<>(diamond, 12);
-        Currency currency = new Currency(120000, Currency.EURO);
+        Currency currency = new Currency(120000, CurrencyType.EURO);
         SafeBox<? extends Value> currencySafeBox = new SafeBox<>(currency, 7);
         goldSafeBox.print();
         System.out.println("\n");
         diamondSafeBox.print();
         System.out.println("\n");
         currencySafeBox.print();
+        System.out.println("\n");
 
         JeweleryBank<? extends Value> jeweleryBank2 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
         Contribution<? extends Value> diamondContribution1 = new Contribution<>(diamond);
@@ -447,6 +435,13 @@ public class MainClass {
         jeweleryBank2.addContribution(client2, goldContribution1);
         Contribution<? extends Value> searched2 = jeweleryBank2.findContribution(client2);
         searched2.print();
+
+        //WORD COUNTER
+        try {
+            WordCounter.countWordsInFile("./src/main/resources/Text.txt", "./src/main/java/com/solvd/banksystem/WordCount.txt");
+        } catch (IOException exception) {
+            LOGGER.error(exception.getMessage());
+        }
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {

@@ -1,6 +1,6 @@
 package com.solvd.banksystem.bank.currency;
 
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 
 public abstract class Value implements Printable {
 

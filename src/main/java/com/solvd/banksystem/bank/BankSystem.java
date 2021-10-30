@@ -1,6 +1,7 @@
 package com.solvd.banksystem.bank;
 
 import com.solvd.banksystem.address.Address;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 import com.solvd.banksystem.bank.employee.Employee;
 import com.solvd.banksystem.bank.organization.Organization;
 import com.solvd.banksystem.bank.organization.TaxPayable;
@@ -17,14 +18,12 @@ import java.util.Objects;
 
 public class BankSystem extends Organization implements Findable {
 
+    private static BankSystem instance;
+
     private List<Bank> banks;
 
-    public BankSystem(String name, Address address, LocalDateTime foundedAt) {
+    private BankSystem(String name, Address address, LocalDateTime foundedAt) {
         super(name, address, foundedAt);
-    }
-
-    public void setBanks(List<Bank> banks) {
-        this.banks = banks;
     }
 
     public List<Bank> getBanks() {
@@ -67,14 +66,14 @@ public class BankSystem extends Organization implements Findable {
         return result;
     }
 
-    public void searchForCreditType(String moneyType) {
+    public void searchForCreditType(CurrencyType currencyType) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
         int flag = 0;
         int otherBanks = 0;
         for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
-                List<CreditType> creditTypes = creditBank.findCreditType(moneyType);
+                List<CreditType> creditTypes = creditBank.findCreditType(currencyType);
                 if (creditTypes != null && !creditTypes.isEmpty()) {
                     for (CreditType creditTypeElement : creditTypes) {
                         System.out.print("Bank \"" + element.getName() + "\" : ");
@@ -92,14 +91,14 @@ public class BankSystem extends Organization implements Findable {
         }
     }
 
-    public void searchForCreditType(String moneyType, double moneyAmount) {
+    public void searchForCreditType(CurrencyType currencyType, double moneyAmount) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
         int flag = 0;
         int otherBanks = 0;
         for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
-                List<CreditType> creditTypes = creditBank.findCreditType(moneyType, moneyAmount);
+                List<CreditType> creditTypes = creditBank.findCreditType(currencyType, moneyAmount);
                 if (creditTypes != null && !creditTypes.isEmpty()) {
                     for (CreditType creditTypeElement : creditTypes) {
                         System.out.print("Bank \"" + element.getName() + "\" : ");
@@ -168,6 +167,14 @@ public class BankSystem extends Organization implements Findable {
         System.out.println("Number types of credits in banks: " + CreditType.count);
         System.out.println("Number of bank clients: " + Client.count);
     }
+    
+    public static BankSystem getInstance(String name, Address address, LocalDateTime foundedAt) {
+        if(instance == null) {
+            instance = new BankSystem(name, address, foundedAt);
+            return instance;
+        }
+        return instance;
+    }
 
     @Override
     public String toString() {
@@ -198,5 +205,9 @@ public class BankSystem extends Organization implements Findable {
         return Objects.hash(Exchangable.USD_BUY, Exchangable.USD_SELL, Exchangable.EURO_SELL, Exchangable.EURO_BUY,
                 Exchangable.RUB_BUY, Exchangable.RUB_SELL, banks, getName(),
                 getFoundedAt(), getAddress());
+    }
+
+    public void setBanks(List<Bank> banks) {
+        this.banks = banks;
     }
 }

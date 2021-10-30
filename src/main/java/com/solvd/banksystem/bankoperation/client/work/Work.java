@@ -1,7 +1,8 @@
-package bankoperation.сlient.work;
+package com.solvd.banksystem.bankoperation.client.work;
 
-import print.Printable;
+import com.solvd.banksystem.print.Printable;
 import java.util.Objects;
+import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class Work implements Printable {
 
@@ -10,13 +11,13 @@ public class Work implements Printable {
     private int salary;
     private String moneyType;
 
-    public Work(String companyName, String positionName, int salary, String moneyType) {
+    public Work(String companyName, String positionName, int salary, CurrencyType currencyType) {
         this.companyName = companyName;
         this.positionName = positionName;
         if (salary > 0) {
             this.salary = salary;
         }
-        this.moneyType = moneyType;
+        this.moneyType = currencyType.getType();
     }
 
     public void setCompanyName(String companyName) {

@@ -24,7 +24,7 @@ public class Credit extends BankOperation {
         this.backMoneyAmount = this.givenMoneyAmount + (this.givenMoneyAmount * creditType.getTermInYears() * (creditType.getYearPercent() / 100));
         this.monthlyPayment = this.backMoneyAmount / (this.creditType.getTermInYears() * 12);
         this.moneyType = creditType.getMoneyType();
-        this.count++;
+        count++;
     }
 
     public CreditType getCreditType() {

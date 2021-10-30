@@ -33,7 +33,6 @@ public class JeweleryBank<T extends Value> extends Organization {
         } else {
             this.contributions.put(client, contribution);
         }
-
     }
 
     public Contribution<? extends Value> findContribution(Client client) {
@@ -47,15 +46,15 @@ public class JeweleryBank<T extends Value> extends Organization {
     public double amountOfDeposits() {
         double resultAmount = 0;
         for (Map.Entry<Client,Contribution<? extends Value>> entry : this.contributions.entrySet()) {
-            if(entry.getValue().getInvested().getValue().getType().equals(Currency.USD)) {
+            if(Currency.CurrencyType.USD.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 resultAmount += entry.getValue().getInvested().getValue().getAmount();
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.EURO)) {
+            } else if(Currency.CurrencyType.EURO.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() * Exchangable.EURO_TO_USD;
                 resultAmount += converted;
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.RUB)) {
+            } else if(Currency.CurrencyType.RUB.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() * Exchangable.RUB_TO_USD;
                 resultAmount += converted;
-            } else if(entry.getValue().getInvested().getValue().getType().equals(Currency.BYN)) {
+            } else if(Currency.CurrencyType.BYN.getType().equals(entry.getValue().getInvested().getValue().getCurrencyType().getType())) {
                 double converted =  entry.getValue().getInvested().getValue().getAmount() / Exchangable.USD_BUY;
                 resultAmount += converted;
             }

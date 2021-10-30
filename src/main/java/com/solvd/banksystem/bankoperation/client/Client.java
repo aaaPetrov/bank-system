@@ -3,7 +3,7 @@ package com.solvd.banksystem.bankoperation.client;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
-import bankoperation.сlient.work.Work;
+import com.solvd.banksystem.bankoperation.client.work.Work;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
