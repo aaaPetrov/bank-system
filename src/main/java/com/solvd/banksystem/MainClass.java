@@ -17,6 +17,9 @@ import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -508,6 +511,49 @@ public class MainClass {
                 System.out.println("I paid some tax with Unnamed Class.");
             }
         });
+
+        System.out.println("\n\n/////////////////////////////////REFLECTION////////////////////////////\n\n");
+        Reflection reflection = null;
+        try {
+            Class myClass = Class.forName(Reflection.class.getName());
+            reflection = (Reflection) myClass.newInstance();
+        } catch (ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } catch (InstantiationException | IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
+        try {
+            Field stringField = reflection.getClass().getDeclaredField("stringField");
+            Field intField = reflection.getClass().getDeclaredField("intField");
+            Field humanField = reflection.getClass().getDeclaredField("humanField");
+            stringField.setAccessible(true);
+            intField.setAccessible(true);
+            humanField.setAccessible(true);
+            stringField.set(reflection, "Value");
+            intField.set(reflection, 10);
+            humanField.set(reflection, new Human(client7.getFirstName(), client7.getLastName(), client7.getBirthday()));
+        } catch (NoSuchFieldException exception) {
+            exception.printStackTrace();
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        } catch (InvalidHumanDataException exception) {
+            exception.printStackTrace();
+        }
+
+        try {
+            Method getStringField =  reflection.getClass().getDeclaredMethod("getStringField");
+            Method getIntField =  reflection.getClass().getDeclaredMethod("getIntField");
+            Method getHumanField =  reflection.getClass().getDeclaredMethod("getHumanField");
+            System.out.println(getStringField.invoke(reflection));
+            System.out.println("\n" + getIntField.invoke(reflection) + "\n");
+            printerMethod((Printable) getHumanField.invoke(reflection));
+        } catch (NoSuchMethodException | SecurityException exception) {
+            exception.printStackTrace();
+        } catch (IllegalAccessException | InvocationTargetException exception) {
+            exception.printStackTrace();
+        }
+
 
         System.out.println("\n\n/////////////////////////////////STREAMS////////////////////////////\n\n");
         System.out.println("/////////////////////////////////////////////////////////////");
