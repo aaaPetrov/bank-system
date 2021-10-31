@@ -23,7 +23,7 @@ public class Mortgage extends BankOperation {
         this.apartment = apartment;
         super.getExpired().setYear(super.getExpired().getYear() + termInYears);
         this.givenMoneyAmount = apartment.getPrice().getAmount();
-        this.backMoneyAmount = this.givenMoneyAmount + (this.givenMoneyAmount * this.termInYears * this.yearPercent);
+        this.backMoneyAmount = this.givenMoneyAmount + (this.givenMoneyAmount * this.termInYears * this.yearPercent / 100);
         this.monthlyPayment = this.backMoneyAmount / (this.termInYears * 12);
         this.moneyType = apartment.getPrice().getCurrencyType().getType();
         count++;

@@ -20,7 +20,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
@@ -29,7 +33,7 @@ public class MainClass {
 
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-    public static void main(String[] args) {
+    public static <money> void main(String[] args) {
         System.out.println("\n\n///////////////////////////////////////////////////////////////////\n\n");
         // we can create Currency objects which can throw an exception,
         // but we don't need to catch them.
@@ -446,10 +450,13 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////LAMBDA////////////////////////////\n\n");
         Printable printable = () -> {
             JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
+
             Gold gold3 = new Gold(100, Gold.Content.C999);
-            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
             Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
             Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
+
             Client client10 = null;
             Client client11 = null;
             try {
@@ -468,10 +475,13 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////OTHER VARIATION OF LAMBDA////////////////////////////\n\n");
         printerMethod(() -> {
             JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
+
             Gold gold3 = new Gold(100, Gold.Content.C999);
-            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
             Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
             Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
+
             Client client10 = null;
             Client client11 = null;
             try {
@@ -499,7 +509,51 @@ public class MainClass {
             }
         });
 
-        jeweleryBank.amountOfDeposits();
+        System.out.println("\n\n/////////////////////////////////STREAMS////////////////////////////\n\n");
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<Work> works = Arrays.asList(work1, work2, work3, work4, work5, work6, work7, work8, work9);
+        List<?> list = works.stream()
+                .filter(work -> work.getSalary() > 1000 && CurrencyType.USD.getType().equals(work.getMoneyType()))
+                .map(work -> work.getPositionName())
+                .collect(Collectors.toList());
+        list.stream()
+                .forEach(System.out::println);
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        works.stream()
+                .filter(work -> work.getSalary() > 1000)
+                .map(work -> work.getSalary())
+                .peek(salary -> System.out.println(salary))
+                .findFirst();
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        String str = works.stream()
+                .map(work -> work.getCompanyName())
+                .peek(companyName -> companyName.toUpperCase(Locale.ROOT))
+                .filter(companyName -> companyName.equals("WONDERLAND"))
+                .findAny()
+                .orElse("THERE IS NO WONDERLAND.");
+        System.out.println(str);
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<Address> adresses = Arrays.asList(adr1, adr2, adr3, adr4, adr5, adr6, adr7, adr8, adr9);
+        adresses.stream()
+                .map(address -> address.getCity())
+                .filter(city -> city.startsWith("M") || city.startsWith("L"))
+                .map(city -> city.concat(" city."))
+                .forEach(city -> System.out.println(city));
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<? extends Bank> banks = Arrays.asList(creditBank1, creditBank2, mortgageBank1, mortgageBank2);
+        banks.stream()
+                .filter(bank -> bank instanceof  MortgageBank)
+                .map(bank -> ((MortgageBank) bank).getMortgages())
+                .flatMap(mortgages -> mortgages.stream())
+                .filter(mortgage -> CurrencyType.EURO.getType().equals(mortgage.getMoneyType()))
+                .peek(mortgage -> printerMethod(mortgage))
+                .filter(mortgage -> mortgage.getMoneyPaid() > 0.0)
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
