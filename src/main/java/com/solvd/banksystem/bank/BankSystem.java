@@ -78,7 +78,7 @@ public class BankSystem extends Organization implements Findable {
                 .filter(bank -> bank instanceof CreditBank)
                 .map(bank -> {
                     List<CreditType> creditTypes = ((CreditBank) bank).findCreditType(currencyType);
-                    creditTypes.stream()
+                    creditTypes
                             .forEach(creditType -> {
                                 System.out.print("Bank \"" + bank.getName() + "\" : ");
                                 creditType.print();
@@ -139,7 +139,7 @@ public class BankSystem extends Organization implements Findable {
                 .filter(bank -> bank instanceof CreditBank)
                 .map(bank -> {
                     List<CreditType> creditTypes = ((CreditBank) bank).findCreditType(currencyType, moneyAmount);
-                    creditTypes.stream()
+                    creditTypes
                             .forEach(creditType -> {
                                 System.out.print("Bank \"" + bank.getName() + "\" : ");
                                 creditType.print();

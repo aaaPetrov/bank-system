@@ -515,11 +515,9 @@ public class MainClass {
         System.out.println("\n\n/////////////////////////////////REFLECTION////////////////////////////\n\n");
         Reflection reflection = null;
         try {
-            Class myClass = Class.forName(Reflection.class.getName());
+            Class<?> myClass = Class.forName(Reflection.class.getName());
             reflection = (Reflection) myClass.newInstance();
-        } catch (ClassNotFoundException exception) {
-            exception.printStackTrace();
-        } catch (InstantiationException | IllegalAccessException exception) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
             exception.printStackTrace();
         }
 
@@ -533,11 +531,7 @@ public class MainClass {
             stringField.set(reflection, "Value");
             intField.set(reflection, 10);
             humanField.set(reflection, new Human(client7.getFirstName(), client7.getLastName(), client7.getBirthday()));
-        } catch (NoSuchFieldException exception) {
-            exception.printStackTrace();
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
-        } catch (InvalidHumanDataException exception) {
+        } catch (NoSuchFieldException | IllegalAccessException | InvalidHumanDataException exception) {
             exception.printStackTrace();
         }
 
@@ -562,15 +556,17 @@ public class MainClass {
                 .filter(work -> work.getSalary() > 1000 && CurrencyType.USD.getType().equals(work.getMoneyType()))
                 .map(work -> work.getPositionName())
                 .collect(Collectors.toList());
-        list.stream()
+        list
                 .forEach(System.out::println);
 
         System.out.println("/////////////////////////////////////////////////////////////");
-        works.stream()
+        int result = works.stream()
                 .filter(work -> work.getSalary() > 1000)
                 .map(work -> work.getSalary())
-                .peek(salary -> System.out.println(salary))
-                .findFirst();
+                .findFirst().orElse(-1);
+        if(result != -1) {
+            System.out.println("First filtered salary: " + result);
+        }
 
         System.out.println("/////////////////////////////////////////////////////////////");
         String str = works.stream()
@@ -603,7 +599,7 @@ public class MainClass {
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
-        bankOperations.stream()
+        bankOperations
                 .forEach(bankOperation -> bankOperation.print());
         /*for (BankOperation bankOperation : bankOperations) {
             bankOperation.print();
@@ -619,7 +615,7 @@ public class MainClass {
     }
 
     private static void printerMethod(List<? extends Printable> printables) {
-        printables.stream()
+        printables
                 .forEach(printable -> printable.print());
         /*for (Printable element : printables) {
             element.print();
