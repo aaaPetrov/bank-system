@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class BankSystem extends Organization implements Findable {
 
@@ -59,18 +61,36 @@ public class BankSystem extends Organization implements Findable {
         }
         if (this.banks != null && this.banks.size() > 0) {
             result = new ArrayList<>();
-            for (Bank element : this.banks) {
+            result.addAll(this.banks.stream()
+                            .map(element -> element.find(human))
+                            .flatMap(bankOperations -> bankOperations.stream())
+                            .collect(Collectors.toList()));
+            /*for (Bank element : this.banks) {
                 result.addAll(element.find(human));
-            }
+            }*/
         }
         return result;
     }
 
     public void searchForCreditType(CurrencyType currencyType) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
-        int flag = 0;
-        int otherBanks = 0;
-        for (Bank element : this.banks) {
+        List<CreditType> creditTypeList = this.banks.stream()
+                .filter(bank -> bank instanceof CreditBank)
+                .map(bank -> {
+                    List<CreditType> creditTypes = ((CreditBank) bank).findCreditType(currencyType);
+                    creditTypes
+                            .forEach(creditType -> {
+                                System.out.print("Bank \"" + bank.getName() + "\" : ");
+                                creditType.print();
+                            });
+                    return creditTypes;
+                }).flatMap(creditTypes -> creditTypes.stream())
+                .collect(Collectors.toList());
+        if(creditTypeList.isEmpty()) {
+            System.out.println("No credits found for your request.");
+        }
+
+        /*for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
                 List<CreditType> creditTypes = creditBank.findCreditType(currencyType);
@@ -85,17 +105,53 @@ public class BankSystem extends Organization implements Findable {
             } else {
                 otherBanks++;
             }
-        }
-        if (flag == this.banks.size() - otherBanks) {
+        }*/
+
+       /* AtomicInteger flag = new AtomicInteger();
+        AtomicInteger otherBanks = new AtomicInteger();
+        this.banks.stream()
+                .forEach(bank -> {
+                    if (bank instanceof CreditBank) {
+                        CreditBank creditBank = (CreditBank) bank;
+                        List<CreditType> creditTypes = creditBank.findCreditType(currencyType);
+                        if (creditTypes != null && !creditTypes.isEmpty()) {
+                            creditTypes.stream().
+                                    forEach(creditType -> {
+                                System.out.print("Bank \"" + bank.getName() + "\" : ");
+                                creditType.print();
+                            });
+                        } else {
+                            flag.getAndIncrement();
+                        }
+                    } else {
+                        otherBanks.getAndIncrement();
+                    }
+                });*/
+
+       /* if (flag.get() == this.banks.size() - otherBanks.get()) {
             System.out.println("No credits found for your request.");
-        }
+        }*/
     }
 
     public void searchForCreditType(CurrencyType currencyType, double moneyAmount) {
         System.out.printf("%-60s%s%s", "\n", "CREDIT SEARCH RESULT:", "\n");
-        int flag = 0;
-        int otherBanks = 0;
-        for (Bank element : this.banks) {
+        List<CreditType> creditTypeList = this.banks.stream()
+                .filter(bank -> bank instanceof CreditBank)
+                .map(bank -> {
+                    List<CreditType> creditTypes = ((CreditBank) bank).findCreditType(currencyType, moneyAmount);
+                    creditTypes
+                            .forEach(creditType -> {
+                                System.out.print("Bank \"" + bank.getName() + "\" : ");
+                                creditType.print();
+                            });
+                    return creditTypes;
+                }).flatMap(creditTypes -> creditTypes.stream())
+                .collect(Collectors.toList());
+        if(creditTypeList.isEmpty()) {
+            System.out.println("No credits found for your request.");
+        }
+
+        /*for (Bank element : this.banks) {
             if (element instanceof CreditBank) {
                 CreditBank creditBank = (CreditBank) element;
                 List<CreditType> creditTypes = creditBank.findCreditType(currencyType, moneyAmount);
@@ -110,10 +166,32 @@ public class BankSystem extends Organization implements Findable {
             } else {
                 otherBanks++;
             }
-        }
-        if (flag == this.banks.size() - otherBanks) {
+        }*/
+
+        /*AtomicInteger flag = new AtomicInteger();
+        AtomicInteger otherBanks = new AtomicInteger();
+        this.banks.stream()
+                .forEach(bank -> {
+                    if (bank instanceof CreditBank) {
+                        CreditBank creditBank = (CreditBank) bank;
+                        List<CreditType> creditTypes = creditBank.findCreditType(currencyType, moneyAmount);
+                        if (creditTypes != null && !creditTypes.isEmpty()) {
+                            creditTypes.stream().
+                                    forEach(creditType -> {
+                                        System.out.print("Bank \"" + bank.getName() + "\" : ");
+                                        creditType.print();
+                                    });
+                        } else {
+                            flag.getAndIncrement();
+                        }
+                    } else {
+                        otherBanks.getAndIncrement();
+                    }
+                });*/
+
+        /*if (flag.get() == this.banks.size() - otherBanks.get()) {
             System.out.println("No credits found for your request.");
-        }
+        }*/
     }
 
     public static void exchangeRates() {

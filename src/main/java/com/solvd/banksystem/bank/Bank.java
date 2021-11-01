@@ -89,12 +89,16 @@ public abstract class Bank extends Organization implements Exchangable, Findable
     }*/
 
     public Employee findEmployee(String firstName, String lastName) {
-        for (Employee employee : this.employees) {
+        return this.employees.stream()
+                .filter(employee -> employee.getFirstName().equals(firstName) &&
+                        employee.getLastName().equals(lastName))
+                .findFirst().orElse(null);
+        /*for (Employee employee : this.employees) {
             if (employee.getFirstName().equals(firstName) && employee.getLastName().equals(lastName)) {
                 return employee;
             }
         }
-        return null;
+        return null;*/
     }
 
     @Override

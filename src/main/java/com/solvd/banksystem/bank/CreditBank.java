@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
 
 public class CreditBank extends Bank {
@@ -67,11 +68,14 @@ public class CreditBank extends Bank {
         List<CreditType> result = null;
         if (this.creditTypes != null && this.creditTypes.size() > 0) {
             result = new ArrayList<>();
-            for (CreditType element : this.creditTypes) {
+            result.addAll(this.creditTypes.stream()
+                    .filter(creditType -> creditType.getMoneyType().equals(currencyType.getType()))
+                    .collect(Collectors.toList()));
+           /*for (CreditType element : this.creditTypes) {
                 if (element.getMoneyType().equals(currencyType.getType())) {
                     result.add(element);
                 }
-            }
+            }*/
         }
         return result;
     }
@@ -80,13 +84,17 @@ public class CreditBank extends Bank {
         List<CreditType> result = null;
         if (this.creditTypes != null && this.creditTypes.size() > 0) {
             result = new ArrayList<>();
-            for (CreditType element : this.creditTypes) {
+            result.addAll(this.creditTypes.stream()
+                    .filter(creditType -> creditType.getMoneyType().equals(currencyType.getType())
+                            && (moneyAmount >= creditType.getMinMoneyAmount() && moneyAmount <= creditType.getMaxMoneyAmount()))
+                    .collect(Collectors.toList()));
+           /* for (CreditType element : this.creditTypes) {
                 if (element.getMoneyType().equals(currencyType.getType()) &&
                         (moneyAmount >= element.getMinMoneyAmount() &&
                                 moneyAmount <= element.getMaxMoneyAmount())) {
                     result.add(element);
                 }
-            }
+            }*/
         }
         return result;
     }
@@ -124,12 +132,16 @@ public class CreditBank extends Bank {
         }
         if (this.credits != null && this.credits.size() > 0) {
             result = new ArrayList<>();
-            for (BankOperation element : this.credits) {
+            result.addAll(this.credits.stream()
+                    .filter(credit -> credit.getClient().getFirstName().equals(human.getFirstName()) &&
+                            credit.getClient().getLastName().equals(human.getLastName()))
+                    .collect(Collectors.toList()));
+            /*for (BankOperation element : this.credits) {
                 if (element.getClient().getFirstName().equals(human.getFirstName()) &&
                         element.getClient().getLastName().equals(human.getLastName())) {
                     result.add(element);
                 }
-            }
+            }*/
         }
         return result;
     }

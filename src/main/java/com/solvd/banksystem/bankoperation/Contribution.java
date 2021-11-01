@@ -52,7 +52,7 @@ public class Contribution<T extends Value> implements Printable {
         invested.print();
         System.out.println("Term of contribution: " + termInYears + " years.");
         System.out.println("Year percent: " + (yearPercent * 100) + "%.");
-        System.out.println("FUNDS WILL BE RETURNED:");
+        System.out.println("\nFUNDS WILL BE RETURNED:");
         returned.print();
     }
 

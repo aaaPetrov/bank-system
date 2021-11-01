@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MortgageBank extends Bank {
 
@@ -64,12 +65,16 @@ public class MortgageBank extends Bank {
         }
         if (this.mortgages != null && this.mortgages.size() > 0) {
             result = new ArrayList<>();
-            for (BankOperation element : this.mortgages) {
+            result.addAll(this.mortgages.stream()
+                    .filter(mortgage -> mortgage.getClient().getFirstName().equals(human.getFirstName()) &&
+                            mortgage.getClient().getLastName().equals(human.getLastName()))
+                    .collect(Collectors.toList()));
+           /*for (BankOperation element : this.mortgages) {
                 if (element.getClient().getFirstName().equals(human.getFirstName()) &&
                         element.getClient().getLastName().equals(human.getLastName())) {
                     result.add(element);
                 }
-            }
+            }*/
         }
         return result;
     }

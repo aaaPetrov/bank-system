@@ -17,10 +17,17 @@ import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
@@ -29,7 +36,7 @@ public class MainClass {
 
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-    public static void main(String[] args) {
+    public static <money> void main(String[] args) {
         System.out.println("\n\n///////////////////////////////////////////////////////////////////\n\n");
         // we can create Currency objects which can throw an exception,
         // but we don't need to catch them.
@@ -442,12 +449,161 @@ public class MainClass {
         } catch (IOException exception) {
             LOGGER.error(exception.getMessage());
         }
+
+        System.out.println("\n\n/////////////////////////////////LAMBDA////////////////////////////\n\n");
+        Printable printable = () -> {
+            JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
+
+            Gold gold3 = new Gold(100, Gold.Content.C999);
+            Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
+            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
+
+            Client client10 = null;
+            Client client11 = null;
+            try {
+                client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
+                client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
+                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client11, goldContribution3);
+                Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
+                searched2.print();
+            } catch (InvalidHumanDataException exception) {
+                LOGGER.error(exception.getMessage());
+            }
+        };
+        printerMethod(printable);
+
+        System.out.println("\n\n/////////////////////////////////OTHER VARIATION OF LAMBDA////////////////////////////\n\n");
+        printerMethod(() -> {
+            JeweleryBank<? extends Value> jeweleryBank3 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
+
+            Gold gold3 = new Gold(100, Gold.Content.C999);
+            Diamond diamond1 = new Diamond(20, new Currency(500, CurrencyType.BYN), "White", Diamond.Clarity.A);
+
+            Contribution<Gold> goldContribution3 = new Contribution<>(gold3);
+            Contribution<? extends Value> diamondContribution2 = new Contribution<>(diamond1);
+
+            Client client10 = null;
+            Client client11 = null;
+            try {
+                client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
+                client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
+                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client11, goldContribution3);
+                Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
+                searched2.print();
+            } catch (InvalidHumanDataException exception) {
+                LOGGER.error(exception.getMessage());
+            }
+        });
+
+        System.out.println("\n\n/////////////////////////////////ANOTHER VARIATION OF LAMBDA////////////////////////////\n\n");
+        payTax(() -> {
+            System.out.println("I paid some tax with Lambda.");
+        });
+
+        System.out.println("\n\n/////////////////////////////////THE SAME WITH UNNAMED CLASS////////////////////////////\n\n");
+        payTax(new TaxPayable() {
+            @Override
+            public void payTax() {
+                System.out.println("I paid some tax with Unnamed Class.");
+            }
+        });
+
+        System.out.println("\n\n/////////////////////////////////REFLECTION////////////////////////////\n\n");
+        Reflection reflection = null;
+        try {
+            Class<?> myClass = Class.forName(Reflection.class.getName());
+            reflection = (Reflection) myClass.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
+        try {
+            Field stringField = reflection.getClass().getDeclaredField("stringField");
+            Field intField = reflection.getClass().getDeclaredField("intField");
+            Field humanField = reflection.getClass().getDeclaredField("humanField");
+            stringField.setAccessible(true);
+            intField.setAccessible(true);
+            humanField.setAccessible(true);
+            stringField.set(reflection, "Value");
+            intField.set(reflection, 10);
+            humanField.set(reflection, new Human(client7.getFirstName(), client7.getLastName(), client7.getBirthday()));
+        } catch (NoSuchFieldException | IllegalAccessException | InvalidHumanDataException exception) {
+            exception.printStackTrace();
+        }
+
+        try {
+            Method getStringField =  reflection.getClass().getDeclaredMethod("getStringField");
+            Method getIntField =  reflection.getClass().getDeclaredMethod("getIntField");
+            Method getHumanField =  reflection.getClass().getDeclaredMethod("getHumanField");
+            System.out.println(getStringField.invoke(reflection));
+            System.out.println("\n" + getIntField.invoke(reflection) + "\n");
+            printerMethod((Printable) getHumanField.invoke(reflection));
+        } catch (NoSuchMethodException | SecurityException exception) {
+            exception.printStackTrace();
+        } catch (IllegalAccessException | InvocationTargetException exception) {
+            exception.printStackTrace();
+        }
+
+
+        System.out.println("\n\n/////////////////////////////////STREAMS////////////////////////////\n\n");
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<Work> works = Arrays.asList(work1, work2, work3, work4, work5, work6, work7, work8, work9);
+        List<?> list = works.stream()
+                .filter(work -> work.getSalary() > 1000 && CurrencyType.USD.getType().equals(work.getMoneyType()))
+                .map(work -> work.getPositionName())
+                .collect(Collectors.toList());
+        list
+                .forEach(System.out::println);
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        int result = works.stream()
+                .filter(work -> work.getSalary() > 1000)
+                .map(work -> work.getSalary())
+                .findFirst().orElse(-1);
+        if(result != -1) {
+            System.out.println("First filtered salary: " + result);
+        }
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        String str = works.stream()
+                .map(work -> work.getCompanyName())
+                .peek(companyName -> companyName.toUpperCase(Locale.ROOT))
+                .filter(companyName -> companyName.equals("WONDERLAND"))
+                .findAny()
+                .orElse("THERE IS NO WONDERLAND.");
+        System.out.println(str);
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<Address> adresses = Arrays.asList(adr1, adr2, adr3, adr4, adr5, adr6, adr7, adr8, adr9);
+        adresses.stream()
+                .map(address -> address.getCity())
+                .filter(city -> city.startsWith("M") || city.startsWith("L"))
+                .map(city -> city.concat(" city."))
+                .forEach(city -> System.out.println(city));
+
+        System.out.println("/////////////////////////////////////////////////////////////");
+        List<? extends Bank> banks = Arrays.asList(creditBank1, creditBank2, mortgageBank1, mortgageBank2);
+        banks.stream()
+                .filter(bank -> bank instanceof  MortgageBank)
+                .map(bank -> ((MortgageBank) bank).getMortgages())
+                .flatMap(mortgages -> mortgages.stream())
+                .filter(mortgage -> CurrencyType.EURO.getType().equals(mortgage.getMoneyType()))
+                .peek(mortgage -> printerMethod(mortgage))
+                .filter(mortgage -> mortgage.getMoneyPaid() > 0.0)
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
-        for (BankOperation bankOperation : bankOperations) {
+        bankOperations
+                .forEach(bankOperation -> bankOperation.print());
+        /*for (BankOperation bankOperation : bankOperations) {
             bankOperation.print();
-        }
+        }*/
     }
 
     private static void payTax(TaxPayable taxPayable) {
@@ -459,9 +615,11 @@ public class MainClass {
     }
 
     private static void printerMethod(List<? extends Printable> printables) {
-        for (Printable element : printables) {
+        printables
+                .forEach(printable -> printable.print());
+        /*for (Printable element : printables) {
             element.print();
-        }
+        }*/
     }
 
     public static Currency exchangeToUsd(Exchangable exchangable, Currency currency) {

@@ -33,7 +33,9 @@ public class WordCounter {
         File toFile = new File(toFilePath);
         toFile.createNewFile();
         FileUtils.writeLines(toFile,
-                wordsCount.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).collect(Collectors.toList()));
+                wordsCount.entrySet().stream().
+                sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).
+                collect(Collectors.toList()));
     }
 
 }
