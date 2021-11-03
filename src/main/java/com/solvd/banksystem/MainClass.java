@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -604,36 +607,68 @@ public class MainClass {
                 .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));*/
 
         System.out.println("\n\n/////////////////////////////////THREADS////////////////////////////\n\n");
-        ConnectionPool threadPool = ConnectionPool.getInstance(5);
-        IntStream.range(0, 100).boxed()
-                .forEach(index -> {
-                    new Thread(() -> {
-                        Connection task = get(threadPool);
-                        if (task != null) {
-                            task.create();
-                            threadPool.releaseTask(task);
-                        }
-                    }).start();
-                });
-
-
-       /* System.out.println("\n\n/////////////////////////////////////////////////////////////");
-        ThreadPool connectionPool = ThreadPool.getInstance(5);
+        /*ThreadPool connectionPool = ThreadPool.getInstance(5);
         IntStream.range(0, 15).boxed()
                 .forEach(index -> {
                     Task task = new Task("Connection" + index);
                     connectionPool.releaseConnection(task);
                 });*/
+        /* System.out.println("\n\n/////////////////////////////////////////////////////////////");*/
+
+        ConnectionPool connectionPool = ConnectionPool.getInstance(5);
+        List<Thread> threads = new ArrayList<>();
+        IntStream.range(0, 10).boxed()
+                .forEach(index -> {
+                    Thread thread = new Thread(() -> {
+                        Connection task = get(connectionPool);
+                        if (task != null) {
+                            task.create();
+                            connectionPool.releaseTask(task);
+                        }
+                    });
+                    threads.add(thread);
+                    thread.start();
+                });
+        join(threads);
+        interrupt(threads);
+
+        System.out.println("\n\n/////////////////////////////////////////////////////////////");
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        IntStream.range(0, 100).boxed()
+                .forEach(index -> {
+                    CompletableFuture<Connection> completableFuture = CompletableFuture.supplyAsync(
+                            () -> new Connection(), executorService);
+                    completableFuture.thenAccept(connection -> connection.read());
+                });
+        executorService.shutdown();
     }
 
-    private static Connection get(ConnectionPool threadPool) {
-        Connection task = null;
+    private static void join(List<Thread> threads) {
+        threads.forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private static void interrupt(List<Thread> threads) {
+        threads.forEach(thread -> {
+            if(thread.isAlive()) {
+                thread.interrupt();
+            }
+        });
+    }
+
+    private static Connection get(ConnectionPool connectionPool) {
+        Connection connection = null;
         try {
-            task = threadPool.getTask();
+            connection = connectionPool.getTask();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return task;
+        return connection;
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
