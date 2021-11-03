@@ -12,10 +12,15 @@ import com.solvd.banksystem.bank.organization.JeweleryBank;
 import com.solvd.banksystem.bank.organization.TaxPayable;
 import com.solvd.banksystem.bankoperation.*;
 import com.solvd.banksystem.bankoperation.client.Client;
+import com.solvd.banksystem.connection.Connection;
+import com.solvd.banksystem.connection.ConnectionPool;
+import com.solvd.banksystem.connection.Task;
+import com.solvd.banksystem.connection.ThreadPool;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -438,7 +444,7 @@ public class MainClass {
 
         JeweleryBank<? extends Value> jeweleryBank2 = new JeweleryBank<>("JewBank", address1, LocalDateTime.of(2005, Month.APRIL, 1, 0, 0));
         Contribution<? extends Value> diamondContribution1 = new Contribution<>(diamond);
-        jeweleryBank2.addContribution(client1,diamondContribution1);
+        jeweleryBank2.addContribution(client1, diamondContribution1);
         jeweleryBank2.addContribution(client2, goldContribution1);
         Contribution<? extends Value> searched2 = jeweleryBank2.findContribution(client2);
         searched2.print();
@@ -465,7 +471,7 @@ public class MainClass {
             try {
                 client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
                 client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
-                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client10, diamondContribution2);
                 jeweleryBank3.addContribution(client11, goldContribution3);
                 Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
                 searched2.print();
@@ -490,7 +496,7 @@ public class MainClass {
             try {
                 client10 = new Client("Bill", "Milligan", LocalDateTime.of(1991, Month.DECEMBER, 1, 12, 44), work4);
                 client11 = new Client("Alisha", "Willis", LocalDateTime.of(1989, Month.FEBRUARY, 23, 16, 11), work5);
-                jeweleryBank3.addContribution(client10,diamondContribution2);
+                jeweleryBank3.addContribution(client10, diamondContribution2);
                 jeweleryBank3.addContribution(client11, goldContribution3);
                 Contribution<? extends Value> searched3 = jeweleryBank2.findContribution(client10);
                 searched2.print();
@@ -536,9 +542,9 @@ public class MainClass {
         }
 
         try {
-            Method getStringField =  reflection.getClass().getDeclaredMethod("getStringField");
-            Method getIntField =  reflection.getClass().getDeclaredMethod("getIntField");
-            Method getHumanField =  reflection.getClass().getDeclaredMethod("getHumanField");
+            Method getStringField = reflection.getClass().getDeclaredMethod("getStringField");
+            Method getIntField = reflection.getClass().getDeclaredMethod("getIntField");
+            Method getHumanField = reflection.getClass().getDeclaredMethod("getHumanField");
             System.out.println(getStringField.invoke(reflection));
             System.out.println("\n" + getIntField.invoke(reflection) + "\n");
             printerMethod((Printable) getHumanField.invoke(reflection));
@@ -564,7 +570,7 @@ public class MainClass {
                 .filter(work -> work.getSalary() > 1000)
                 .map(work -> work.getSalary())
                 .findFirst().orElse(-1);
-        if(result != -1) {
+        if (result != -1) {
             System.out.println("First filtered salary: " + result);
         }
 
@@ -586,7 +592,7 @@ public class MainClass {
                 .forEach(city -> System.out.println(city));
 
         System.out.println("/////////////////////////////////////////////////////////////");
-        List<? extends Bank> banks = Arrays.asList(creditBank1, creditBank2, mortgageBank1, mortgageBank2);
+        /*List<? extends Bank> banks = Arrays.asList(creditBank1, creditBank2, mortgageBank1, mortgageBank2);
         banks.stream()
                 .filter(bank -> bank instanceof  MortgageBank)
                 .map(bank -> ((MortgageBank) bank).getMortgages())
@@ -595,7 +601,39 @@ public class MainClass {
                 .peek(mortgage -> printerMethod(mortgage))
                 .filter(mortgage -> mortgage.getMoneyPaid() > 0.0)
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));
+                .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));*/
+
+        System.out.println("\n\n/////////////////////////////////THREADS////////////////////////////\n\n");
+        ConnectionPool threadPool = ConnectionPool.getInstance(5);
+        IntStream.range(0, 100).boxed()
+                .forEach(index -> {
+                    new Thread(() -> {
+                        Connection task = get(threadPool);
+                        if (task != null) {
+                            task.create();
+                            threadPool.releaseTask(task);
+                        }
+                    }).start();
+                });
+
+
+       /* System.out.println("\n\n/////////////////////////////////////////////////////////////");
+        ThreadPool connectionPool = ThreadPool.getInstance(5);
+        IntStream.range(0, 15).boxed()
+                .forEach(index -> {
+                    Task task = new Task("Connection" + index);
+                    connectionPool.releaseConnection(task);
+                });*/
+    }
+
+    private static Connection get(ConnectionPool threadPool) {
+        Connection task = null;
+        try {
+            task = threadPool.getTask();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return task;
     }
 
     private static void printOperations(List<BankOperation> bankOperations) {
