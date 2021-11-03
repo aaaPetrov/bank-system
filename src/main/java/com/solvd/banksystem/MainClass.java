@@ -14,13 +14,10 @@ import com.solvd.banksystem.bankoperation.*;
 import com.solvd.banksystem.bankoperation.client.Client;
 import com.solvd.banksystem.connection.Connection;
 import com.solvd.banksystem.connection.ConnectionPool;
-import com.solvd.banksystem.connection.Task;
-import com.solvd.banksystem.connection.ThreadPool;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +33,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
@@ -632,7 +628,7 @@ public class MainClass {
         join(threads);
         interrupt(threads);
 
-        System.out.println("\n\n/////////////////////////////////////////////////////////////");
+        System.out.println("\n\n//////////////////////////EXECUTORSERVICE + COMPLETABLEFUTURE///////////////////////////////////");
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         IntStream.range(0, 100).boxed()
                 .forEach(index -> {
