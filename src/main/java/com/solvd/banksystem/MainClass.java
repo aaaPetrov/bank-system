@@ -14,6 +14,7 @@ import com.solvd.banksystem.bankoperation.*;
 import com.solvd.banksystem.bankoperation.client.Client;
 import com.solvd.banksystem.connection.Connection;
 import com.solvd.banksystem.connection.ConnectionPool;
+import com.solvd.banksystem.connection.LazyConnectionPool;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
@@ -611,10 +612,12 @@ public class MainClass {
                 });*/
         /* System.out.println("\n\n/////////////////////////////////////////////////////////////");*/
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance(5);
         List<Thread> threads = new ArrayList<>();
         IntStream.range(0, 10).boxed()
                 .forEach(index -> {
+                    //NOT LAZY
+                    //ConnectionPool connectionPool = ConnectionPool.getInstance(5);
+                    LazyConnectionPool connectionPool = LazyConnectionPool.getInstance(5);
                     Thread thread = new Thread(() -> {
                         Connection task = get(connectionPool);
                         if (task != null) {
@@ -632,9 +635,8 @@ public class MainClass {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         IntStream.range(0, 100).boxed()
                 .forEach(index -> {
-                    CompletableFuture<Connection> completableFuture = CompletableFuture.supplyAsync(
-                            () -> new Connection(), executorService);
-                    completableFuture.thenAccept(connection -> connection.read());
+                    CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(
+                            () -> new Connection(), executorService).thenAccept(connection -> connection.read());
                 });
         executorService.shutdown();
     }
@@ -658,6 +660,16 @@ public class MainClass {
     }
 
     private static Connection get(ConnectionPool connectionPool) {
+        Connection connection = null;
+        try {
+            connection = connectionPool.getTask();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
+    private static Connection get(LazyConnectionPool connectionPool) {
         Connection connection = null;
         try {
             connection = connectionPool.getTask();
