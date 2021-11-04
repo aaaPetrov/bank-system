@@ -13,7 +13,7 @@ public class LazyConnectionPool {
 
     private LazyConnectionPool(int sizeOfPool) {
         this.size = sizeOfPool;
-        this.counter = sizeOfPool;
+        counter = sizeOfPool;
         this.connections = new ConcurrentLinkedQueue<>();
     }
 

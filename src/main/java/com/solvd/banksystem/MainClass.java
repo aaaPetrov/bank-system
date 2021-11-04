@@ -12,13 +12,12 @@ import com.solvd.banksystem.bank.organization.JeweleryBank;
 import com.solvd.banksystem.bank.organization.TaxPayable;
 import com.solvd.banksystem.bankoperation.*;
 import com.solvd.banksystem.bankoperation.client.Client;
-import com.solvd.banksystem.connection.Connection;
-import com.solvd.banksystem.connection.ConnectionPool;
-import com.solvd.banksystem.connection.LazyConnectionPool;
+import com.solvd.banksystem.connection.*;
 import com.solvd.banksystem.exception.InvalidClientAgeException;
 import com.solvd.banksystem.exception.InvalidHumanDataException;
 import com.solvd.banksystem.human.Human;
 import com.solvd.banksystem.print.Printable;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import com.solvd.banksystem.bank.currency.Currency.CurrencyType;
@@ -604,16 +604,8 @@ public class MainClass {
                 .orElseThrow(() -> new RuntimeException("SOMETHING GOES WRONG Exception."));*/
 
         System.out.println("\n\n/////////////////////////////////THREADS////////////////////////////\n\n");
-        /*ThreadPool connectionPool = ThreadPool.getInstance(5);
-        IntStream.range(0, 15).boxed()
-                .forEach(index -> {
-                    Task task = new Task("Connection" + index);
-                    connectionPool.releaseConnection(task);
-                });*/
-        /* System.out.println("\n\n/////////////////////////////////////////////////////////////");*/
-
         List<Thread> threads = new ArrayList<>();
-        IntStream.range(0, 100).boxed()
+        IntStream.range(0, 5).boxed()
                 .forEach(index -> {
                     //NOT LAZY
                     //ConnectionPool connectionPool = ConnectionPool.getInstance(5);
@@ -631,14 +623,33 @@ public class MainClass {
         join(threads);
         interrupt(threads);
 
+        System.out.println("\n\n/////////////////////////////////////////////////////////////");
+        ThreadPool threadPool = ThreadPool.getInstance(5);
+        IntStream.range(0, 5).boxed()
+                .forEach(index -> {
+                    Task task = new Task("Task " + index);
+                    threadPool.releaseConnection(task);
+                });
+        threadPool.waitUntilAllTasksFinished();
+        threadPool.shotdown();
+
         System.out.println("\n\n//////////////////////////EXECUTORSERVICE + COMPLETABLEFUTURE///////////////////////////////////");
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        IntStream.range(0, 100).boxed()
+        /*ExecutorService executorService = Executors.newFixedThreadPool(10);
+        IntStream.range(0, 50).boxed()
                 .forEach(index -> {
                     CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(
                             () -> new Connection(), executorService).thenAccept(connection -> connection.read());
-                });
+                });*/
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        IntStream.range(0, 50).boxed()
+                .map(index -> {
+                    CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(
+                            () -> new Connection(), executorService).thenAccept(connection -> connection.read());
+                    return completableFuture;
+                })
+                .collect(Collectors.toList()).forEach(voidCompletableFuture -> voidCompletableFuture.join());
         executorService.shutdown();
+        System.out.println("program ended.");
     }
 
     private static void join(List<Thread> threads) {
@@ -646,14 +657,14 @@ public class MainClass {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         });
     }
 
     private static void interrupt(List<Thread> threads) {
         threads.forEach(thread -> {
-            if(thread.isAlive()) {
+            if (thread.isAlive()) {
                 thread.interrupt();
             }
         });
@@ -664,7 +675,7 @@ public class MainClass {
         try {
             connection = connectionPool.getTask();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return connection;
     }
@@ -674,7 +685,7 @@ public class MainClass {
         try {
             connection = connectionPool.getTask();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return connection;
     }

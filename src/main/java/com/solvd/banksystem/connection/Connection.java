@@ -1,13 +1,19 @@
 package com.solvd.banksystem.connection;
 
 
+import com.solvd.banksystem.MainClass;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Connection {
+
+    private static final Logger LOGGER = LogManager.getLogger(Connection.class);
 
     public void create() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         System.out.println(Thread.currentThread().getName() + " created.");
     }
@@ -16,7 +22,7 @@ public class Connection {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         System.out.println(Thread.currentThread().getName() + " read.");
     }
@@ -25,7 +31,7 @@ public class Connection {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         System.out.println(Thread.currentThread().getName() + " updated.");
     }
@@ -34,7 +40,7 @@ public class Connection {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         System.out.println(Thread.currentThread().getName() + " deleted.");
     }
