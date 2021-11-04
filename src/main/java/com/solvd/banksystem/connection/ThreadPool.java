@@ -66,7 +66,7 @@ public class ThreadPool {
                             try {
                                 connection.join();
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                LOGGER.error(e.getMessage());
                             }
                             connection.interrupt();
                         }
