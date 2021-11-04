@@ -613,7 +613,7 @@ public class MainClass {
         /* System.out.println("\n\n/////////////////////////////////////////////////////////////");*/
 
         List<Thread> threads = new ArrayList<>();
-        IntStream.range(0, 10).boxed()
+        IntStream.range(0, 100).boxed()
                 .forEach(index -> {
                     //NOT LAZY
                     //ConnectionPool connectionPool = ConnectionPool.getInstance(5);
